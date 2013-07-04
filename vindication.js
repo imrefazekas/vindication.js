@@ -1,93 +1,93 @@
 (function () {
 	var root = this;
 
-	var validator = function(obj) {
-		if (obj instanceof validator) return obj;
-		if (!(this instanceof validator)) return new validator(obj);
+	var vindication = function(obj) {
+		if (obj instanceof vindication) return obj;
+		if (!(this instanceof vindication)) return new vindication(obj);
 		this._wrapped = obj;
 	};
 
 	if (typeof exports !== 'undefined') {
 		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = validator;
+			exports = module.exports = vindication;
 		}
-		exports.validator = validator;
+		exports.vindication = vindication;
 	} else {
-		root.validator = validator;
+		root.vindication = vindication;
 	}
 
-	validator.VERSION = "1.0.3";
+	vindication.VERSION = "1.0.3";
 
-	validator.isString = function (obj) {
+	vindication.isString = function (obj) {
 		return "[object String]" == toString.call(obj);
 	};
 
-	validator.isObject = function (obj) {
+	vindication.isObject = function (obj) {
 		return obj === Object(obj);
 	};
 
-	validator.isNumber = function (obj) {
+	vindication.isNumber = function (obj) {
 		return (toString.call(obj) == "[object " + Number + "]") || !isNaN(obj);
 	};
 
-	validator.isDate = function (obj) {
+	vindication.isDate = function (obj) {
 		return toString.call(obj) == "[object " + Date + "]";
 	};
 
-	validator.isFunction = function (obj) {
+	vindication.isFunction = function (obj) {
 		return toString.call(obj) == "[object " + Function + "]";
 	};
 
 	if (typeof (/./) !== 'function') {
-		validator.isFunction = function(obj) {
+		vindication.isFunction = function(obj) {
 			return typeof obj === 'function';
 		};
 	}
 
-	validator.isArray = Array.isArray || function (obj) {
+	vindication.isArray = Array.isArray || function (obj) {
 		return "[object Array]" == toString.call(obj);
 	};
 
-	validator.required = function ( object, cvalue ) {
+	vindication.required = function ( object, cvalue ) {
 		return !cvalue || object;
 	};
-	validator.notblank = function ( object, cvalue ) {
-		return validator.isString( object ) && '' !== object.replace( /^\s+/g, '' ).replace( /\s+$/g, '' );
+	vindication.notblank = function ( object, cvalue ) {
+		return vindication.isString( object ) && '' !== object.replace( /^\s+/g, '' ).replace( /\s+$/g, '' );
 	};
-	validator.minlength = function ( object, cvalue ) {
+	vindication.minlength = function ( object, cvalue ) {
 		return object.length >= cvalue;
 	};
-	validator.maxlength = function ( object, cvalue ) {
+	vindication.maxlength = function ( object, cvalue ) {
 		return object.length <= cvalue;
 	};
-	validator.rangelength = function ( object, cvalue ) {
-		return validator.minlength( object, cvalue[ 0 ] ) && validator.maxlength( object, cvalue[ 1 ] );
+	vindication.rangelength = function ( object, cvalue ) {
+		return vindication.minlength( object, cvalue[ 0 ] ) && vindication.maxlength( object, cvalue[ 1 ] );
 	};
-	validator.min = function ( object, cvalue ) {
+	vindication.min = function ( object, cvalue ) {
 		return Number( object ) >= cvalue;
 	};
-	validator.max = function ( object, cvalue ) {
+	vindication.max = function ( object, cvalue ) {
 		return Number( object ) <= cvalue;
 	};
-	validator.range = function ( object, cvalue ) {
+	vindication.range = function ( object, cvalue ) {
 		return object >= cvalue[ 0 ] && object <= cvalue[ 1 ];
 	};
-	validator.regexp = function ( object, cvalue ) {
+	vindication.regexp = function ( object, cvalue ) {
 		return new RegExp( cvalue ).test( object );
 	};
-	validator.equalto = function ( object, cvalue ) {
+	vindication.equalto = function ( object, cvalue ) {
 		return object === cvalue;
 	};
-	validator.mincheck = function ( object, cvalue ) {
-		return validator.minlength( object, cvalue );
+	vindication.mincheck = function ( object, cvalue ) {
+		return vindication.minlength( object, cvalue );
 	};
-	validator.maxcheck = function ( object, cvalue ) {
-		return validator.maxlength( object, cvalue );
+	vindication.maxcheck = function ( object, cvalue ) {
+		return vindication.maxlength( object, cvalue );
 	};
-	validator.rangecheck = function ( object, cvalue ) {
-		return validator.rangelength( object, cvalue );
+	vindication.rangecheck = function ( object, cvalue ) {
+		return vindication.rangelength( object, cvalue );
 	};
-	validator.type = function ( object, cvalue ) {
+	vindication.type = function ( object, cvalue ) {
 		var regExp;
 
 		switch ( cvalue ) {
@@ -123,10 +123,10 @@
 		return '' !== object ? regExp.test( object ) : false;
 	};
 
-	validator.checkConstraints = function ( object, constraints ) {
+	vindication.checkConstraints = function ( object, constraints ) {
 		for (var key in constraints){
 			if( key !== 'message' ){
-				var resp = validator[ key ](object, constraints[key]) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
+				var resp = vindication[ key ](object, constraints[key]) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
 				if( resp )
 					return resp;
 			}
@@ -134,17 +134,17 @@
 	};
 
 
-	validator.validate = function (obj, rules, context) {
+	vindication.validate = function (obj, rules, context) {
 		var self = context || this;
 		return function( data, validationRules ){
 
 			function walk( object, constraints ) {
 				var res;
-				if ( validator.isString(object) || validator.isDate(object) || validator.isNumber(object) || validator.isFunction(object) ){
+				if ( vindication.isString(object) || vindication.isDate(object) || vindication.isNumber(object) || vindication.isFunction(object) ){
 					if(constraints)
-						return validator.checkConstraints( object, constraints );
+						return vindication.checkConstraints( object, constraints );
 				}
-				else if ( validator.isArray(object) ){
+				else if ( vindication.isArray(object) ){
 					for (var index in object){
 						var resp = walk( object[index], constraints );
 						if( resp ){
@@ -154,7 +154,7 @@
 						}
 					}
 				}
-				else if ( validator.isObject(object) ){
+				else if ( vindication.isObject(object) ){
 					for (var key in object){
 						var respo = walk( object[key], constraints ? constraints[key] : null );
 						if( respo ){

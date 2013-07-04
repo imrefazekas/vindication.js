@@ -1,7 +1,7 @@
-validator.js
+vindication.js
 ========
 
-[validator.js](https://github.com/imrefazekas/validator.js) is a dependency-free extremely small library aiding the validation processes for objects. Can be used on both server and client side. 
+[vindication.js](https://github.com/imrefazekas/vindication.js) is a dependency-free extremely small library aiding the validation processes for objects. Can be used on both server and client side. 
 
 By passing an object and a constraint rule object, the object will be validated and the function will return with the possible errors or undefined.
 The data object will be iterated through recursively along/parallel with the constraint rule object and if any pairing rule can be identified will be matched against the given value. See below...
@@ -17,11 +17,11 @@ Usage:
 
 Command line:
 
-	npm install validator.js
+	npm install vindication.js
 
 In [node.js](www.nodejs.org) code:
 
-	var v = require('./validator');
+	var v = require('./vindication');
 	...
 	var s = v.validate(
 		{ // Object to be validated
@@ -62,11 +62,11 @@ Result:
 
 In _head_
 
-	<script src='validator.min.js'></script>
+	<script src='vindication.min.js'></script>
 
 In any _script_ tag
 
-	validator.validate( obj, rules );
+	vindication.validate( obj, rules );
 
 
 ## Rules
