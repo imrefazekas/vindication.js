@@ -1,0 +1,37 @@
+{
+  "name": "vindication.js",
+  "version": "1.0.0",
+  "description": "JavaScript's function client-server synchronization helper library.",
+  "homepage": "https://github.com/imrefazekas/vindication.js",
+  "keywords": [
+    "validation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/imrefazekas/vindication.js.git"
+  },
+  "bugs": {
+    "url": "http://github.com/imrefazekas/vindication.js/issues"
+  },
+  "author": {
+    "name": "Imre Fazekas",
+    "email": "imre.fazekas@gmail.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "vindication.js",
+  "scripts": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.2.0",
+    "grunt-contrib-uglify": "~0.2.2"
+  },
+  "readme": "README.md",
+  "readmeFilename": "README.md",
+  "_id": "vindication.js@1.0.3",
+  "_from": "vindication.js@~1"
+}
