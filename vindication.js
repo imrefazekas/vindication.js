@@ -16,7 +16,7 @@
 		root.vindication = vindication;
 	}
 
-	vindication.VERSION = "1.0.3";
+	vindication.VERSION = "1.1.0";
 
 	vindication.isString = function (obj) {
 		return "[object String]" == toString.call(obj);
@@ -123,12 +123,23 @@
 		return '' !== object ? regExp.test( object ) : false;
 	};
 
-	vindication.checkConstraints = function ( object, constraints ) {
+	vindication.checkConstraints = function( model, objectFunc, constraints ) {
+		var object = objectFunc();
 		for (var key in constraints){
 			if( key !== 'message' ){
-				var resp = vindication[ key ](object, constraints[key]) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
-				if( resp )
-					return resp;
+				var constraint = constraints[key];
+				if( constraint.params && constraint.condition ){
+					if( constraint.condition(model) ){
+						var cresp = vindication[ key ](object, constraint.params) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
+						if( cresp )
+							return cresp;
+					}
+				}
+				else{
+					var resp = vindication[ key ](object, constraint) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
+					if( resp )
+						return resp;
+				}
 			}
 		}
 	};
@@ -138,15 +149,33 @@
 		var self = context || this;
 		return function( data, validationRules ){
 
-			function walk( object, constraints ) {
-				var res;
+			function functify( object ) {
+				var res = object;
 				if ( vindication.isString(object) || vindication.isDate(object) || vindication.isNumber(object) || vindication.isFunction(object) ){
+					res = function(){ return object; };
+				}
+				else if ( vindication.isArray(object) ){
+					res = [];
+					for (var index in object)
+						res.push( functify( object[index] ) );
+				}
+				else if ( vindication.isObject(object) ){
+					res = {};
+					for (var key in object)
+						res[key] = functify( object[key] );
+				}
+				return res;
+			}
+
+			function walk( model, object, constraints ) {
+				var res;
+				if ( vindication.isFunction(object) ){
 					if(constraints)
-						return vindication.checkConstraints( object, constraints );
+						return vindication.checkConstraints( model, object, constraints );
 				}
 				else if ( vindication.isArray(object) ){
 					for (var index in object){
-						var resp = walk( object[index], constraints );
+						var resp = walk( model, object[index], constraints );
 						if( resp ){
 							if(!res)
 								res = [];
@@ -156,7 +185,7 @@
 				}
 				else if ( vindication.isObject(object) ){
 					for (var key in object){
-						var respo = walk( object[key], constraints ? constraints[key] : null );
+						var respo = walk( model, object[key], constraints ? constraints[key] : null );
 						if( respo ){
 							if(!res)
 								res = {};
@@ -168,7 +197,8 @@
 				return res;
 			}
 
-			return walk( data, validationRules );
+			var model = functify(data);
+			return walk( model, model, validationRules );
 		}( obj, rules );
 	};
 

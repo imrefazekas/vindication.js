@@ -4,7 +4,18 @@ vindication.js
 [vindication.js](https://github.com/imrefazekas/vindication.js) is a dependency-free extremely small library aiding the validation processes for objects. Can be used on both server and client side. 
 
 By passing an object and a constraint rule object, the object will be validated and the function will return with the possible errors or undefined.
-The data object will be iterated through recursively along/parallel with the constraint rule object and if any pairing rule can be identified will be matched against the given value. See below...
+The data object will be iterated through recursively along/parallel with the constraint rule object and if any pairing rule can be identified will be matched against the given value. 
+
+Features:
+
+- simple value-based rules: required, notblank, minlength, equalto
+- regular expression rules
+- conditional validation: validation rule based on a condition evaluated realtime
+- regular expression-based type rules: email, url, date, phone, etc.
+- range-based validations
+- rules for arrays type values
+- customizable error messages
+
 
 Usage:
 
@@ -99,3 +110,13 @@ The rule syntax is simple as 1. For every attribute inside an object at whatever
 	message : 'Custom error message'
 
 The syntax of rules is inherited from [parsley](http://parsleyjs.org) which could be the simplest and greatest validation library for web pages.
+
+You can go beyond these rules by defining conditional rules as well:
+
+	city: { 
+		equalto: {
+			params:"Paris", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+		}
+	}
+
+This _equalto_ rule is validated only if the condition function returns true.
