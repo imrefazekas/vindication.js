@@ -16,7 +16,7 @@
 		root.vindication = vindication;
 	}
 
-	vindication.VERSION = "1.1.0";
+	vindication.VERSION = "1.2.0";
 
 	vindication.isString = function (obj) {
 		return "[object String]" == toString.call(obj);
@@ -46,6 +46,10 @@
 
 	vindication.isArray = Array.isArray || function (obj) {
 		return "[object Array]" == toString.call(obj);
+	};
+
+	vindication.isRule = function(obj){
+		return obj && vindication.isObject( obj ) && !vindication.isFunction(obj);
 	};
 
 	vindication.required = function ( object, cvalue ) {
@@ -149,20 +153,26 @@
 		var self = context || this;
 		return function( data, validationRules ){
 
-			function functify( object ) {
+			function functify( object, constraints ) {
 				var res = object;
-				if ( vindication.isString(object) || vindication.isDate(object) || vindication.isNumber(object) || vindication.isFunction(object) ){
+				if (
+					vindication.isRule(constraints) &&
+					(vindication.isString(object) || vindication.isDate(object) || vindication.isNumber(object) || vindication.isFunction(object))
+				){
 					res = function(){ return object; };
 				}
 				else if ( vindication.isArray(object) ){
 					res = [];
-					for (var index in object)
-						res.push( functify( object[index] ) );
+					if( vindication.isRule(constraints) )
+						for (var index in object)
+							res.push( functify( object[index], constraints ) );
 				}
 				else if ( vindication.isObject(object) ){
 					res = {};
-					for (var key in object)
-						res[key] = functify( object[key] );
+					if( constraints )
+						for (var key in object)
+							if( vindication.isRule(constraints[key]) )
+								res[key] = functify( object[key], constraints[key] );
 				}
 				return res;
 			}
@@ -201,7 +211,7 @@
 				return res;
 			}
 
-			var model = functify(data);
+			var model = functify( data, validationRules );
 
 			return walk( model, model, validationRules );
 		}( obj, rules );
