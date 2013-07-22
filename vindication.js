@@ -175,21 +175,25 @@
 				}
 				else if ( vindication.isArray(object) ){
 					for (var index in object){
-						var resp = walk( model, object[index], constraints );
-						if( resp ){
-							if(!res)
-								res = [];
-							res.push( resp );
+						if( constraints ){
+							var resp = walk( model, object[index], constraints );
+							if( resp ){
+								if(!res)
+									res = [];
+								res.push( resp );
+							}
 						}
 					}
 				}
 				else if ( vindication.isObject(object) ){
 					for (var key in object){
-						var respo = walk( model, object[key], constraints ? constraints[key] : null );
-						if( respo ){
-							if(!res)
-								res = {};
-							res[key] = respo;
+						if( constraints[key] ){
+							var respo = walk( model, object[key], constraints[key] );
+							if( respo ){
+								if(!res)
+									res = {};
+								res[key] = respo;
+							}
 						}
 					}
 				}
@@ -198,6 +202,7 @@
 			}
 
 			var model = functify(data);
+
 			return walk( model, model, validationRules );
 		}( obj, rules );
 	};
