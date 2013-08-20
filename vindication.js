@@ -18,6 +18,8 @@
 
 	vindication.VERSION = "1.2.0";
 
+	var toString = Object.prototype.toString;
+
 	vindication.isString = function (obj) {
 		return "[object String]" == toString.call(obj);
 	};
