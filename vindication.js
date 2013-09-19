@@ -16,7 +16,7 @@
 		root.vindication = vindication;
 	}
 
-	vindication.VERSION = "1.2.0";
+	vindication.VERSION = "1.2.3";
 
 	var toString = Object.prototype.toString;
 
