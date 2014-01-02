@@ -1,6 +1,6 @@
 {
   "name": "vindication.js",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "JavaScript's function client-server synchronization helper library.",
   "homepage": "https://github.com/imrefazekas/vindication.js",
   "keywords": [
@@ -27,8 +27,8 @@
   "scripts": {},
   "devDependencies": {
     "grunt": "~0.4",
-    "grunt-contrib-jshint": "~0.7",
+    "grunt-contrib-jshint": "~0.8",
     "grunt-contrib-uglify": "~0.2"
   },
-  "_id": "vindication.js@1.2.3"
+  "_id": "vindication.js@1.2.4"
 }
