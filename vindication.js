@@ -136,13 +136,13 @@
 				var constraint = constraints[key];
 				if( constraint.params && constraint.condition ){
 					if( constraint.condition(model) ){
-						var cresp = vindication[ key ](object, constraint.params) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
+						var cresp = vindication[ key ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 						if( cresp )
 							return cresp;
 					}
 				}
 				else{
-					var resp = vindication[ key ](object, constraint) ? null : (constraints['message'] || 'This value seems to be invalid:') + ' ' + object;
+					var resp = vindication[ key ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 					if( resp )
 						return resp;
 				}
