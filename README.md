@@ -1,10 +1,12 @@
-vindication.js
+Vindication.js - dependency-free validation library
+
+[![NPM](https://nodei.co/npm/vindication.js.png)](https://nodei.co/npm/vindication.js/)
 ========
 
-[vindication.js](https://github.com/imrefazekas/vindication.js) is a dependency-free extremely small library aiding the validation processes for objects. Can be used on both server and client side. 
+[vindication.js](https://github.com/imrefazekas/vindication.js) is a dependency-free extremely small library aiding the validation processes for objects. Can be used on both server and client side.
 
 By passing an object and a constraint rule object, the object will be validated and the function will return with the possible errors or undefined.
-The data object will be iterated through recursively along/parallel with the constraint rule object and if any pairing rule can be identified will be matched against the given value. 
+The data object will be iterated through recursively along/parallel with the constraint rule object and if any pairing rule can be identified will be matched against the given value.
 
 Features:
 
@@ -68,7 +70,7 @@ Result:
 
 	{
 		salary: 'This value seems to be invalid: 50000',
-		roles: [ 'This value seems to be invalid: :::manager' ] 
+		roles: [ 'This value seems to be invalid: :::manager' ]
 	}
 
 
@@ -116,7 +118,7 @@ The syntax of rules is inherited from [parsley](http://parsleyjs.org) which coul
 
 You can go beyond these rules by defining conditional rules as well:
 
-	city: { 
+	city: {
 		equalto: {
 			params:"Paris", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 		}
