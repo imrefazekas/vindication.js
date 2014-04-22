@@ -1,27 +1,26 @@
 required="true"
-notblank="true"
 minlength="6"
 maxlength="6"
-rangelength="[5,10]"
+length="[6, 10]"
 min="6"
 max="100"
 range="[6, 100]"
-regexp="<regexp>"
+pattern = "<regexp>"
 equalto="#elem"
 mincheck="2"
 maxcheck="2"
-rangecheck="[1,2]"
+check="[1,2]"
 
 remote="http://yoururl.com" // Parsley will accept these valid returns with a 200 response code: 1, true, { "success": "..." } and assume false otherwise
 You can show frontend server-side specific error messages by returning { "error": "your custom message" } or { "message": "your custom message" }
 
 
 type="email"
-type="url"
-type="urlstrict"
-type="digits"
 type="number"
+type="digits"
+type="integer"
 type="alphanum"
+type="url"
 type="dateIso"
 type="phone"
 

@@ -15,16 +15,16 @@ var s = f.validate(
 	},
 	{
 		firstName: { required: true, type: "alphanum" },
-		lastName: { notblank: true, type: "alphanum" },
+		lastName: { minlength: "1", type: "alphanum" },
 		salary: { min: 80000 },
-		roles: { regexp:/^\w+$/ },
+		roles: { pattern:/^\w+$/ },
 		address:{
 			country: { minlength: 6 },
 			city: { equalto: {
 					params:"Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 			} },
 			zipCode: { range: [10000, 100000] },
-			street: { rangelength:[5, 50] }
+			street: { length:[5, 50] }
 		}
 	}
 );

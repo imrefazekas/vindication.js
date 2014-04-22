@@ -54,46 +54,43 @@
 		return obj && vindication.isObject( obj ) && !vindication.isFunction(obj);
 	};
 
-	vindication.required = function ( object, cvalue ) {
+	vindication.requiredFn = function ( object, cvalue ) {
 		return !cvalue || object;
 	};
-	vindication.notblank = function ( object, cvalue ) {
-		return vindication.isString( object ) && '' !== object.replace( /^\s+/g, '' ).replace( /\s+$/g, '' );
-	};
-	vindication.minlength = function ( object, cvalue ) {
+	vindication.minlengthFn = function ( object, cvalue ) {
 		return object.length >= cvalue;
 	};
-	vindication.maxlength = function ( object, cvalue ) {
+	vindication.maxlengthFn = function ( object, cvalue ) {
 		return object.length <= cvalue;
 	};
-	vindication.rangelength = function ( object, cvalue ) {
-		return vindication.minlength( object, cvalue[ 0 ] ) && vindication.maxlength( object, cvalue[ 1 ] );
+	vindication.lengthFn = function ( object, cvalue ) {
+		return vindication.minlengthFn( object, cvalue[ 0 ] ) && vindication.maxlengthFn( object, cvalue[ 1 ] );
 	};
-	vindication.min = function ( object, cvalue ) {
+	vindication.minFn = function ( object, cvalue ) {
 		return Number( object ) >= cvalue;
 	};
-	vindication.max = function ( object, cvalue ) {
+	vindication.maxFn = function ( object, cvalue ) {
 		return Number( object ) <= cvalue;
 	};
-	vindication.range = function ( object, cvalue ) {
+	vindication.rangeFn = function ( object, cvalue ) {
 		return object >= cvalue[ 0 ] && object <= cvalue[ 1 ];
 	};
-	vindication.regexp = function ( object, cvalue ) {
+	vindication.patternFn = function ( object, cvalue ) {
 		return new RegExp( cvalue ).test( object );
 	};
-	vindication.equalto = function ( object, cvalue ) {
+	vindication.equaltoFn = function ( object, cvalue ) {
 		return object === cvalue;
 	};
-	vindication.mincheck = function ( object, cvalue ) {
-		return vindication.minlength( object, cvalue );
+	vindication.mincheckFn = function ( object, cvalue ) {
+		return vindication.minlengthFn( object, cvalue );
 	};
-	vindication.maxcheck = function ( object, cvalue ) {
-		return vindication.maxlength( object, cvalue );
+	vindication.maxcheckFn = function ( object, cvalue ) {
+		return vindication.maxlengthFn( object, cvalue );
 	};
-	vindication.rangecheck = function ( object, cvalue ) {
-		return vindication.rangelength( object, cvalue );
+	vindication.checkFn = function ( object, cvalue ) {
+		return vindication.lengthFn( object, cvalue );
 	};
-	vindication.type = function ( object, cvalue ) {
+	vindication.typeFn = function ( object, cvalue ) {
 		var regExp;
 
 		switch ( cvalue ) {
@@ -103,6 +100,9 @@
 			case 'digits':
 				regExp = /^\d+$/;
 				break;
+			case 'integer':
+				regExp = /^-?\d+$/;
+				break;
 			case 'alphanum':
 				regExp = /^\w+$/;
 				break;
@@ -110,10 +110,7 @@
 				regExp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
 				break;
 			case 'url':
-				val = new RegExp( '(https?|s?ftp|git)', 'i' ).test( val ) ? val : 'http://' + val;
-				/* falls through */
-			case 'urlstrict':
-				regExp = /^(https?|s?ftp|git):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
+				regExp = Regexp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)', 'i');
 				break;
 			case 'dateIso':
 				regExp = /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/;
@@ -136,13 +133,13 @@
 				var constraint = constraints[key];
 				if( constraint.params && constraint.condition ){
 					if( constraint.condition(model) ){
-						var cresp = vindication[ key ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
+						var cresp = vindication[ key + 'Fn' ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 						if( cresp )
 							return cresp;
 					}
 				}
 				else{
-					var resp = vindication[ key ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
+					var resp = vindication[ key + 'Fn' ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 					if( resp )
 						return resp;
 				}
