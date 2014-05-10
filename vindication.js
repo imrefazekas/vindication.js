@@ -213,11 +213,7 @@
 				return res;
 			}
 
-			console.log( data );
-
 			var model = functify( data, validationRules );
-
-			console.log( model );
 
 			return walk( model, model, validationRules );
 		}( obj, rules );
