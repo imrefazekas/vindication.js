@@ -4,6 +4,7 @@ var s = f.validate(
 	{
 		firstName: "Bob",
 		lastName: "Smith",
+		salutation: 'Dr.',
 		salary: 50000,
 		roles: [ ":::manager", "supermanager", "kingmanager", "ultramanager" ],
 		address:{
@@ -18,10 +19,14 @@ var s = f.validate(
 		lastName: { minlength: "1", type: "alphanum" },
 		salary: { min: 80000 },
 		roles: { pattern:/^\w+$/ },
+		salutation: function( value ){
+			console.log('salutation....');
+			return value !== 'Dr.';
+		},
 		address:{
 			country: { minlength: 6 },
 			city: { equalto: {
-					params:"Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+					params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 			} },
 			zipCode: { range: [10000, 100000] },
 			street: { length:[5, 50] }

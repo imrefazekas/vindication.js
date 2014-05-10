@@ -51,7 +51,7 @@
 	};
 
 	vindication.isRule = function(obj){
-		return obj && vindication.isObject( obj ) && !vindication.isFunction(obj);
+		return obj && vindication.isObject( obj ); // && !vindication.isFunction(obj);
 	};
 
 	vindication.requiredFn = function ( object, cvalue ) {
@@ -128,7 +128,11 @@
 
 	vindication.checkConstraints = function( model, objectFunc, constraints ) {
 		var object = objectFunc();
-		for (var key in constraints){
+		if( vindication.isFunction( constraints ) ){
+			if( !constraints( object ) )
+				return 'This value seems to be invalid:' + ' ' + object;
+		}
+		else for (var key in constraints){
 			if( key !== 'message' ){
 				var constraint = constraints[key];
 				if( constraint.params && constraint.condition ){
@@ -146,7 +150,6 @@
 			}
 		}
 	};
-
 
 	vindication.validate = function (obj, rules, context) {
 		var self = context || this;
@@ -210,7 +213,11 @@
 				return res;
 			}
 
+			console.log( data );
+
 			var model = functify( data, validationRules );
+
+			console.log( model );
 
 			return walk( model, model, validationRules );
 		}( obj, rules );
