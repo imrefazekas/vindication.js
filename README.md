@@ -63,7 +63,7 @@ In [node.js](www.nodejs.org) code:
 				return value !== 'Dr.';
 			},
 			address:{
-				country: { minlength: 6 },
+				country: { minlength: 6, element: ["Germany"] },
 				city: { equalto: {
 						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 				} },
@@ -81,7 +81,10 @@ Result:
 		salutation: 'This value seems to be invalid: Dr.',
 		salary: 'This value seems to be invalid: 50000',
 		roles: [ 'This value seems to be invalid: :::manager' ],
-		address: { city: 'This value seems to be invalid: Paris' }
+		address: {
+			country: 'This value seems to be invalid: France',
+			city: 'This value seems to be invalid: Paris'
+		}
 	}
 
 
