@@ -40,26 +40,35 @@ In [node.js](www.nodejs.org) code:
 	var v = require('./vindication');
 	...
 	var s = v.validate(
-		{ // Object to be validated
-			"firstName": "Bob",
-			"lastName": "Smith",
-			"salary":50000,
-			"roles": [ ":::manager", "supermanager", "kingmanager", "ultramanager" ],
-			"address":{
-				"city": "Paris",
-				"zipCode": 75009,
-				"street": "Haussmann 40"
+		{
+			firstName: "Bob",
+			lastName: "Smith",
+			salutation: 'Dr.',
+			salary: 50000,
+			roles: [ ":::manager", "supermanager", "kingmanager", "ultramanager" ],
+			address:{
+				country: "France",
+				city: "Paris",
+				zipCode: 75009,
+				street: "Haussmann 40"
 			}
 		},
-		{ // Validation rules
-			"firstName": { required: true, type: "alphanum" },
-			"lastName": { notblank: true, type: "alphanum" },
-			"salary": { min: 80000 },
-			"roles": { regexp:/^\w+$/ },
-			"address":{
-				"city": { equalto: "Paris" },
-				"zipCode": { range: [10000, 100000] },
-				"street": { rangelength:[5, 50] }
+		{
+			firstName: { required: true, type: "alphanum" },
+			lastName: { minlength: "1", type: "alphanum" },
+			salary: { min: 80000 },
+			roles: { pattern:/^\w+$/ },
+			salutation: function( value ){
+				console.log('salutation....');
+				return value !== 'Dr.';
+			},
+			address:{
+				country: { minlength: 6 },
+				city: { equalto: {
+						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+				} },
+				zipCode: { range: [10000, 100000] },
+				street: { length:[5, 50] }
 			}
 		}
 	);
@@ -69,8 +78,10 @@ In [node.js](www.nodejs.org) code:
 Result:
 
 	{
+		salutation: 'This value seems to be invalid: Dr.',
 		salary: 'This value seems to be invalid: 50000',
-		roles: [ 'This value seems to be invalid: :::manager' ]
+		roles: [ 'This value seems to be invalid: :::manager' ],
+		address: { city: 'This value seems to be invalid: Paris' }
 	}
 
 
@@ -90,18 +101,17 @@ In any _script_ tag
 The rule syntax is simple as 1. For every attribute inside an object at whatever level, you can define a rule object possessing a subset of the following definitions:
 
 	required : true
-	notblank : true
 	minlength : 6
 	maxlength : 6
-	rangelength: [5,10]
+	length: [5,10]
 	min : 6
 	max : 100
 	range : [6, 100]
-	regexp : '<regexp>'
+	pattern : '<regexp>'
 	equalto : '#elem'
 	mincheck : 2
 	maxcheck : 2
-	rangecheck : [1,2]
+	check : [1,2]
 
 	type : email'
 	type : url'
@@ -114,7 +124,7 @@ The rule syntax is simple as 1. For every attribute inside an object at whatever
 
 	message : 'Custom error message'
 
-The syntax of rules is inherited from [parsley](http://parsleyjs.org) which could be the simplest and greatest validation library for web pages.
+The syntax of rules is inherited from [parsley](http://parsleyjs.org) v2, which could be the simplest and greatest validation library for web pages.
 
 You can go beyond these rules by defining conditional rules as well:
 
