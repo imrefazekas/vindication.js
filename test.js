@@ -24,7 +24,7 @@ var s = f.validate(
 			return value !== 'Dr.';
 		},
 		address:{
-			country: { minlength: 6 },
+			country: { minlength: 6, element: ["France"] },
 			city: { equalto: {
 					params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 			} },
