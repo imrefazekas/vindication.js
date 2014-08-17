@@ -59,10 +59,10 @@
 		return !cvalue || object;
 	};
 	Vindication.minlengthFn = function ( object, cvalue ) {
-		return object.length >= cvalue;
+		return object && object.length >= cvalue;
 	};
 	Vindication.maxlengthFn = function ( object, cvalue ) {
-		return object.length <= cvalue;
+		return object && object.length <= cvalue;
 	};
 	Vindication.lengthFn = function ( object, cvalue ) {
 		return Vindication.minlengthFn( object, cvalue[ 0 ] ) && Vindication.maxlengthFn( object, cvalue[ 1 ] );
@@ -71,13 +71,13 @@
 		return Vindication.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
 	};
 	Vindication.minFn = function ( object, cvalue ) {
-		return Number( object ) >= cvalue;
+		return object && Number( object ) >= cvalue;
 	};
 	Vindication.maxFn = function ( object, cvalue ) {
-		return Number( object ) <= cvalue;
+		return object && Number( object ) <= cvalue;
 	};
 	Vindication.rangeFn = function ( object, cvalue ) {
-		return object >= cvalue[ 0 ] && object <= cvalue[ 1 ];
+		return object && object >= cvalue[ 0 ] && object <= cvalue[ 1 ];
 	};
 	Vindication.patternFn = function ( object, cvalue ) {
 		return new RegExp( cvalue ).test( object );
