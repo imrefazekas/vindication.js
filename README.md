@@ -17,6 +17,7 @@ Features:
 - range-based validations
 - rules for arrays type values
 - customizable error messages
+- multiple validation
 
 
 For a more complex scenario please find a complex project boilerplate: [Division.js](https://github.com/imrefazekas/division.js), where one business model is defined and maintained allowing you to use the same objects - including model and validation and computed values and associated functions - on both client side, server side and DB interaction!
@@ -139,3 +140,20 @@ You can go beyond these rules by defining conditional rules as well:
 	}
 
 This _equalto_ rule is validated only if the condition function returns true.
+
+
+## Multiple  validation
+
+One can pass an array of objects as well to be validated as follows:
+
+	var s = v.validateAll( objArray, rules );
+
+All objects will be validated, and the returning object will contain the validation errors referenced by the array index:
+
+	{ '0':
+		{ salutation: 'This value seems to be invalid: Dr.',
+			salary: 'This value seems to be invalid: 50000',
+			roles: [ 'This value seems to be invalid: :::manager' ],
+			address: { city: 'This value seems to be invalid: Paris' }
+		}
+	}

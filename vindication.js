@@ -155,6 +155,17 @@
 		}
 	};
 
+	Vindication.validateAll = function (objArray, rules, context) {
+		var result = {};
+		for(var i=0; i<objArray.length; i+=1){
+			var obj = objArray[i];
+			var validation = Vindication.validate( obj, rules, context );
+			if( validation )
+				result[ i ] = validation;
+		}
+		return result;
+	};
+
 	Vindication.validate = function (obj, rules, context) {
 		var self = context || this;
 		return (function( data, validationRules ){
