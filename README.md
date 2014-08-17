@@ -106,6 +106,7 @@ The rule syntax is simple as 1. For every attribute inside an object at whatever
 	length: [5,10]
 	min : 6
 	max : 100
+	element : [ 'PossibleValue1', 'PossibleValue1' ]
 	range : [6, 100]
 	pattern : '<regexp>'
 	equalto : '#elem'

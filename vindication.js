@@ -25,7 +25,8 @@
 	};
 
 	Vindication.isObject = function (obj) {
-		return obj === Object(obj);
+		var type = typeof obj;
+		return type === 'function' || type === 'object' && !!obj;
 	};
 
 	Vindication.isNumber = function (obj) {
@@ -40,15 +41,15 @@
 		return toString.call(obj) === "[object " + Function + "]";
 	};
 
+	Vindication.isArray = Array.isArray || function(obj) {
+		return toString.call(obj) === '[object Array]';
+	};
+
 	if (typeof (/./) !== 'function') {
 		Vindication.isFunction = function(obj) {
 			return typeof obj === 'function';
 		};
 	}
-
-	Vindication.isArray = Array.isArray || function (obj) {
-		return "[object Array]" === toString.call(obj);
-	};
 
 	Vindication.isRule = function(obj){
 		return obj && Vindication.isObject( obj ); // && !Vindication.isFunction(obj);
@@ -65,6 +66,9 @@
 	};
 	Vindication.lengthFn = function ( object, cvalue ) {
 		return Vindication.minlengthFn( object, cvalue[ 0 ] ) && Vindication.maxlengthFn( object, cvalue[ 1 ] );
+	};
+	Vindication.elementFn = function ( object, cvalue ) {
+		return Vindication.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
 	};
 	Vindication.minFn = function ( object, cvalue ) {
 		return Number( object ) >= cvalue;
