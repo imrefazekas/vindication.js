@@ -21,6 +21,8 @@
 	var toString = Object.prototype.toString;
 
 	Vindication.extend = function(target, source) {
+		if( !source ) return target;
+		if( !target ) target = { };
 		if ( Vindication.isObject( source ) )
 			for (var prop in source)
 				if (prop in target)
