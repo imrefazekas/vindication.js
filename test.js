@@ -30,6 +30,9 @@ var rules = {
 		} },
 		zipCode: { range: [10000, 100000] },
 		street: { length:[5, 50] }
+	},
+	papers: {
+		id: { required: true }
 	}
 };
 

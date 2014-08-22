@@ -16,9 +16,19 @@
 		root.Vindication = Vindication;
 	}
 
-	Vindication.VERSION = "1.2.3";
+	Vindication.VERSION = "2.2.0";
 
 	var toString = Object.prototype.toString;
+
+	Vindication.extend = function(target, source) {
+		if ( Vindication.isObject( source ) )
+			for (var prop in source)
+				if (prop in target)
+					Vindication.extend(target[prop], source[prop]);
+				else
+					target[prop] = source[prop];
+		return target;
+	};
 
 	Vindication.isString = function (obj) {
 		return "[object String]" === toString.call(obj);
@@ -195,6 +205,26 @@
 				return res;
 			}
 
+			function requiredWalk( model, object, constraints ) {
+				var res;
+				var emptyFn = function(){ return null; };
+				if ( Vindication.isObject( constraints ) ){
+					for (var key in constraints){
+						if( constraints[key].required && !object[key] ){
+							if( !res ) res = { };
+							res[ key ] = Vindication.checkConstraints( model, emptyFn, constraints[key] );
+						} else {
+							var respo = requiredWalk( model, object[key] || {}, constraints[key] );
+							if( respo ){
+								if( !res ) res = { };
+								res[ key ] = respo;
+							}
+						}
+					}
+				}
+				return res;
+			}
+
 			function walk( model, object, constraints ) {
 				var res;
 				if ( Vindication.isFunction(object) ){
@@ -231,7 +261,10 @@
 
 			var model = functify( data, validationRules );
 
-			return walk( model, model, validationRules );
+			var requiredValidation = requiredWalk( model, model, validationRules );
+			var normalValidation = walk( model, model, validationRules );
+
+			return Vindication.extend( requiredValidation, walk( model, model, validationRules ) );
 		}( obj, rules ));
 	};
 
