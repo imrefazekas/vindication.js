@@ -143,10 +143,10 @@
 		return '' !== object ? regExp.test( object ) : false;
 	};
 
-	Vindication.checkConstraints = function( model, objectFunc, constraints ) {
+	Vindication.checkConstraints = function( model, objectFunc, constraints, referenceData ) {
 		var object = objectFunc();
 		if( Vindication.isFunction( constraints ) ){
-			if( !constraints.call( model, object ) )
+			if( !constraints.call( referenceData, object ) )
 				return 'This value seems to be invalid:' + ' ' + object;
 		}
 		else for (var key in constraints){
@@ -208,16 +208,16 @@
 				return res;
 			}
 
-			function requiredWalk( model, object, constraints ) {
+			function requiredWalk( model, object, constraints, referenceData ) {
 				var res;
 				var emptyFn = function(){ return null; };
 				if ( Vindication.isObject( constraints ) ){
 					for (var key in constraints){
 						if( constraints[key].required && !object[key] ){
 							if( !res ) res = { };
-							res[ key ] = Vindication.checkConstraints( model, emptyFn, constraints[key] );
+							res[ key ] = Vindication.checkConstraints( model, emptyFn, constraints[key], referenceData );
 						} else {
-							var respo = requiredWalk( model, object[key] || {}, constraints[key] );
+							var respo = requiredWalk( model, object[key] || {}, constraints[key], referenceData );
 							if( respo ){
 								if( !res ) res = { };
 								res[ key ] = respo;
@@ -228,16 +228,16 @@
 				return res;
 			}
 
-			function walk( model, object, constraints ) {
+			function walk( model, object, constraints, referenceData ) {
 				var res;
 				if ( Vindication.isFunction(object) ){
 					if(constraints)
-						return Vindication.checkConstraints( model, object, constraints );
+						return Vindication.checkConstraints( model, object, constraints, referenceData );
 				}
 				else if ( Vindication.isArray(object) ){
 					for (var index in object){
 						if( constraints ){
-							var resp = walk( model, object[index], constraints );
+							var resp = walk( model, object[index], constraints, referenceData );
 							if( resp ){
 								if(!res)
 									res = [];
@@ -249,7 +249,7 @@
 				else if ( Vindication.isObject(object) ){
 					for (var key in object){
 						if( constraints[key] ){
-							var respo = walk( model, object[key], constraints[key] );
+							var respo = walk( model, object[key], constraints[key], referenceData );
 							if( respo ){
 								if(!res)
 									res = {};
@@ -264,10 +264,10 @@
 
 			var model = functify( data, validationRules );
 
-			var requiredValidation = requiredWalk( model, model, validationRules );
-			var normalValidation = walk( model, model, validationRules );
+			var requiredValidation = requiredWalk( model, model, validationRules, data );
+			var normalValidation = walk( model, model, validationRules, data );
 
-			return Vindication.extend( requiredValidation, walk( model, model, validationRules ) );
+			return Vindication.extend( requiredValidation, normalValidation );
 		}( obj, rules ));
 	};
 
