@@ -74,7 +74,7 @@
 		return object && object.length >= cvalue;
 	};
 	Vindication.maxlengthFn = function ( object, cvalue ) {
-		return object && object.length <= cvalue;
+		return !object || object.length <= cvalue;
 	};
 	Vindication.lengthFn = function ( object, cvalue ) {
 		if( Vindication.isString(cvalue) ){ cvalue = JSON.parse( cvalue ); }
