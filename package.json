@@ -1,6 +1,6 @@
 {
   "name": "vindication.js",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "JavaScript's function client-server synchronization helper library.",
   "homepage": "https://github.com/imrefazekas/vindication.js",
   "keywords": [
@@ -32,5 +32,5 @@
     "gulp-rename": "latest",
     "gulp-uglify": "latest"
   },
-  "_id": "vindication.js@2.2.1"
+  "_id": "vindication.js@2.2.2"
 }

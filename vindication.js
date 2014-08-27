@@ -146,7 +146,7 @@
 	Vindication.checkConstraints = function( model, objectFunc, constraints ) {
 		var object = objectFunc();
 		if( Vindication.isFunction( constraints ) ){
-			if( !constraints( object ) )
+			if( !constraints.call( model, object ) )
 				return 'This value seems to be invalid:' + ' ' + object;
 		}
 		else for (var key in constraints){
