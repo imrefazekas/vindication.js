@@ -29,7 +29,7 @@ var rules = {
 				params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 		} },
 		zipCode: { range: [10000, 100000] },
-		street: { length:[5, 50] }
+		street: { length: "[5, 50]" }
 	},
 	papers: {
 		id: { required: true }
