@@ -259,7 +259,7 @@
 					}
 				}
 
-				return res;
+				return res || { };
 			}
 
 			var model = functify( data, validationRules );
