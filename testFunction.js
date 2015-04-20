@@ -16,7 +16,7 @@ var object = {
 				}
 				return true;
 			},
-			detailsOfPayments: { required:false, maxlength: '35' },
+			detailsOfPayments: { required:false, maxlength: '35', message: 'Special error on details of Payment' },
 		}
 	}
 };
