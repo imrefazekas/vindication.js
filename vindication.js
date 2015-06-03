@@ -1,113 +1,47 @@
-(function () {
-	var root = this;
+var _ = require('lodash');
 
-	var Vindication = function(obj) {
-		if (obj instanceof Vindication) return obj;
-		if (!(this instanceof Vindication)) return new Vindication(obj);
-		this._wrapped = obj;
-	};
-
-	if (typeof exports !== 'undefined') {
-		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = Vindication;
-		}
-		exports.Vindication = Vindication;
-	} else {
-		root.Vindication = Vindication;
-	}
-
-	Vindication.VERSION = "2.2.0";
-
-	var toString = Object.prototype.toString;
-
-	Vindication.extend = function(target, source) {
-		if( !source ) return target;
-		if( !target ) target = { };
-		if ( Vindication.isObject( source ) )
-			for (var prop in source)
-				if (prop in target)
-					Vindication.extend(target[prop], source[prop]);
-				else
-					target[prop] = source[prop];
-		return target;
-	};
-
-	Vindication.isString = function (obj) {
-		return "[object String]" === toString.call(obj);
-	};
-
-	Vindication.isObject = function (obj) {
-		var type = typeof obj;
-		return type === 'function' || type === 'object' && !!obj;
-	};
-
-	Vindication.isNumber = function (obj) {
-		return (toString.call(obj) === "[object " + Number + "]") || !isNaN(obj);
-	};
-
-	Vindication.isDate = function (obj) {
-		return toString.call(obj) === "[object " + Date + "]";
-	};
-
-	Vindication.isFunction = function (obj) {
-		return toString.call(obj) === "[object " + Function + "]";
-	};
-
-	Vindication.isArray = Array.isArray || function(obj) {
-		return toString.call(obj) === '[object Array]';
-	};
-
-	if (typeof (/./) !== 'function') {
-		Vindication.isFunction = function(obj) {
-			return typeof obj === 'function';
-		};
-	}
-
-	Vindication.isRule = function(obj){
-		return obj && Vindication.isObject( obj ); // && !Vindication.isFunction(obj);
-	};
-
-	Vindication.requiredFn = function ( object, cvalue ) {
+var Vindication = {
+	requiredFn: function( object, cvalue ) {
 		return !cvalue || object;
-	};
-	Vindication.minlengthFn = function ( object, cvalue ) {
+	},
+	minlengthFn: function( object, cvalue ) {
 		return object && object.length >= cvalue;
-	};
-	Vindication.maxlengthFn = function ( object, cvalue ) {
+	},
+	maxlengthFn: function( object, cvalue ) {
 		return !object || object.length <= cvalue;
-	};
-	Vindication.lengthFn = function ( object, cvalue ) {
-		if( Vindication.isString(cvalue) ){ cvalue = JSON.parse( cvalue ); }
-		return Vindication.minlengthFn( object, cvalue[ 0 ] ) && Vindication.maxlengthFn( object, cvalue[ 1 ] );
-	};
-	Vindication.elementFn = function ( object, cvalue ) {
-		return Vindication.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
-	};
-	Vindication.minFn = function ( object, cvalue ) {
+	},
+	lengthFn: function( object, cvalue ) {
+		if( _.isString(cvalue) ){ cvalue = JSON.parse( cvalue ); }
+		return this.minlengthFn( object, cvalue[ 0 ] ) && this.maxlengthFn( object, cvalue[ 1 ] );
+	},
+	elementFn: function( object, cvalue ) {
+		return _.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
+	},
+	minFn: function( object, cvalue ) {
 		return object && Number( object ) >= cvalue;
-	};
-	Vindication.maxFn = function ( object, cvalue ) {
+	},
+	maxFn: function( object, cvalue ) {
 		return object && Number( object ) <= cvalue;
-	};
-	Vindication.rangeFn = function ( object, cvalue ) {
+	},
+	rangeFn: function( object, cvalue ) {
 		return object && object >= cvalue[ 0 ] && object <= cvalue[ 1 ];
-	};
-	Vindication.patternFn = function ( object, cvalue ) {
+	},
+	patternFn: function( object, cvalue ) {
 		return new RegExp( cvalue ).test( object );
-	};
-	Vindication.equaltoFn = function ( object, cvalue ) {
+	},
+	equaltoFn: function( object, cvalue ) {
 		return object === cvalue;
-	};
-	Vindication.mincheckFn = function ( object, cvalue ) {
-		return Vindication.minlengthFn( object, cvalue );
-	};
-	Vindication.maxcheckFn = function ( object, cvalue ) {
-		return Vindication.maxlengthFn( object, cvalue );
-	};
-	Vindication.checkFn = function ( object, cvalue ) {
-		return Vindication.lengthFn( object, cvalue );
-	};
-	Vindication.typeFn = function ( object, cvalue ) {
+	},
+	notblank: function( object, cvalue ) {
+		return !cvalue || this.minlengthFn( object, 1 );
+	},
+	beforeFn: function( object, cvalue ) {
+		return this.maxFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue );
+	},
+	afterFn: function( object, cvalue ) {
+		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue );
+	},
+	typeFn: function( object, cvalue ) {
 		var regExp;
 
 		switch ( cvalue ) {
@@ -140,135 +74,95 @@
 		}
 
 		// test regExp if not null
-		return '' !== object ? regExp.test( object ) : false;
-	};
+		return object !== '' ? regExp.test( object ) : false;
+	},
 
-	Vindication.checkConstraints = function( model, objectFunc, constraints, referenceData ) {
-		var object = objectFunc();
-		if( Vindication.isFunction( constraints ) ){
-			if( !constraints.call( referenceData, object ) )
+	checkConstraints: function( root, object, constraints, context ) {
+		var self = this;
+		if( _.isFunction( constraints ) ){
+			if( !constraints.call( context, object ) )
 				return 'This value seems to be invalid:' + ' ' + object;
 		}
 		else for (var key in constraints){
 			if( key !== 'message' ){
 				var constraint = constraints[key];
 				if( constraint.params && constraint.condition ){
-					if( constraint.condition(model) ){
-						var cresp = Vindication[ key + 'Fn' ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
+					/*city: { equalto: {
+						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+					} },*/
+					if( constraint.condition( root ) ){
+						var cresp = self[ key + 'Fn' ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 						if( cresp )
 							return cresp;
 					}
 				}
 				else{
-					var resp = Vindication[ key + 'Fn' ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
+					var resp = self[ key + 'Fn' ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 					if( resp )
 						return resp;
 				}
 			}
 		}
-	};
-
-	Vindication.validateAll = function (objArray, rules, context) {
-		var result = {};
-		for(var i=0; i<objArray.length; i+=1){
-			var obj = objArray[i];
-			var validation = Vindication.validate( obj, rules, context );
-			if( validation )
-				result[ i ] = validation;
+	},
+	walk: function( root, object, constraints, context ) {
+		var self = this, res;
+		if ( _.isString( object ) ){
+			return self.checkConstraints( root, object, constraints, context );
 		}
-		return result;
-	};
-
-	Vindication.validate = function (obj, rules, context) {
-		var self = context || this;
-		return (function( data, validationRules ){
-
-			function functify( object, constraints ) {
-				var res = object;
-				if (
-					Vindication.isRule(constraints) &&
-					(Vindication.isString(object) || Vindication.isDate(object) || Vindication.isNumber(object) || Vindication.isFunction(object))
-				){
-					res = function(){ return object; };
-				}
-				else if ( Vindication.isArray(object) ){
-					res = [];
-					if( Vindication.isRule(constraints) )
-						for (var index in object)
-							if( object[index] )
-								res.push( functify( object[index], constraints ) );
-				}
-				else if ( Vindication.isObject(object) ){
-					res = {};
-					if( constraints )
-						for (var key in object)
-							if( Vindication.isRule(constraints[key]) )
-								res[key] = functify( object[key], constraints[key] );
-				}
-				return res;
+		else if ( _.isBoolean( object ) ){
+			return self.checkConstraints( root, object, constraints, context );
+		}
+		else if ( _.isNumber( object ) ){
+			return self.checkConstraints( root, object, constraints, context );
+		}
+		else if ( _.isDate( object ) ){
+			return self.checkConstraints( root, object, constraints, context );
+		}
+		else if ( _.isRegExp( object ) ){
+			return null;
+		}
+		else if ( _.isArray( object ) ){
+			res = [];
+			object.forEach(function(element){
+				var result = self.walk( root, element, constraints, context );
+				if( result )
+					res.push( result );
+			});
+			return res.length === 0 ? null : res;
+		}
+		else if ( _.isFunction( object ) ){
+			return self.checkConstraints( root, object.call( context ), constraints, context );
+		}
+		else if ( _.isObject( object ) ){
+			if( _.isFunction( constraints ) ){
+				return self.checkConstraints( root, object, constraints, context );
 			}
-
-			function requiredWalk( model, object, constraints, referenceData ) {
-				var res;
-				var emptyFn = function(){ return null; };
-				if ( Vindication.isObject( constraints ) ){
-					for (var key in constraints){
-						if( constraints[key].required && !object[key] ){
-							if( !res ) res = { };
-							res[ key ] = Vindication.checkConstraints( model, emptyFn, constraints[key], referenceData );
-						} else {
-							var respo = requiredWalk( model, object[key] || {}, constraints[key], referenceData );
-							if( respo ){
-								if( !res ) res = { };
-								res[ key ] = respo;
-							}
-						}
+			else{
+				res = {};
+				_.forEach(object, function(n, key){
+					if( key && object[key] && constraints[key] ){
+						var result = self.walk( root, object[key], constraints[key], context );
+						if( result )
+							res[key] = result;
 					}
-				}
-				return res;
+				});
+				return _.keys(res).length === 0 ? null : res;
 			}
+		}
+	}
+};
 
-			function walk( model, object, constraints, referenceData ) {
-				var res;
-				if ( Vindication.isFunction(object) ){
-					if(constraints)
-						return Vindication.checkConstraints( model, object, constraints, referenceData );
-				}
-				else if ( Vindication.isArray(object) ){
-					for (var index in object){
-						if( constraints ){
-							var resp = walk( model, object[index], constraints, referenceData );
-							if( resp ){
-								if(!res)
-									res = [];
-								res.push( resp );
-							}
-						}
-					}
-				}
-				else if ( Vindication.isObject(object) ){
-					for (var key in object){
-						if( constraints[key] ){
-							var respo = walk( model, object[key], constraints[key], referenceData );
-							if( respo ){
-								if(!res)
-									res = {};
-								res[key] = respo;
-							}
-						}
-					}
-				}
-
-				return res;
-			}
-
-			var model = functify( data, validationRules );
-
-			var requiredValidation = requiredWalk( model, model, validationRules, data );
-			var normalValidation = walk( model, model, validationRules, data );
-
-			return Vindication.extend( requiredValidation, normalValidation );
-		}( obj, rules ));
-	};
-
-}).call(this);
+module.exports = {
+	version: '3.0.0',
+	validate: function(object, constraints, context) {
+		return Vindication.walk( object || {}, object || {}, constraints || {}, context || this );
+	},
+	validateAll: function(objects, constraints, context) {
+		if( !_.isArray( objects ) ) return this.validate( objects, constraints, context );
+		var res = [];
+		objects.forEach(function(object){
+			res.push( Vindication.walk( object || {}, object || {}, constraints || {}, context || this ) );
+		});
+		return res;
+	}
+};
