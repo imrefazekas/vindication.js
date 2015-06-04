@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var f = require('./vindication');
 
+var s;
+
 var object = {
 	firstName: "Bob",
 	lastName: "Smith",
@@ -37,7 +39,7 @@ var rules = {
 	}
 };
 
-var s = f.validate( object, rules );
+s = f.validate( object, rules );
 
 console.log( s );
 
@@ -46,5 +48,9 @@ s = f.validateAll( [object], rules );
 console.log( s );
 
 s = f.validate( "", { type: "email" } );
+
+console.log( s );
+
+s = f.validate( { email: "" }, { email: { type: "email" } } );
 
 console.log( s );

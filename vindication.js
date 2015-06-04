@@ -139,8 +139,8 @@ var Vindication = {
 			else{
 				res = {};
 				_.forEach(object, function(n, key){
-					if( key && object[key] && constraints[key] ){
-						var result = self.walk( root, object[key], constraints[key], context );
+					if( key && constraints[key] ){
+						var result = self.walk( root, n, constraints[key], context );
 						if( result )
 							res[key] = result;
 					}
@@ -148,19 +148,20 @@ var Vindication = {
 				return _.keys(res).length === 0 ? null : res;
 			}
 		}
+		return null;
 	}
 };
 
 module.exports = {
-	version: '3.0.1',
+	version: '3.0.2',
 	validate: function(object, constraints, context) {
-		return Vindication.walk( object, object, constraints || {}, context || this );
+		return Vindication.walk( object, object, constraints || {}, context || object );
 	},
 	validateAll: function(objects, constraints, context) {
 		if( !_.isArray( objects ) ) return this.validate( objects, constraints, context );
 		var res = [];
 		objects.forEach(function(object){
-			res.push( Vindication.walk( object, object, constraints || {}, context || this ) );
+			res.push( Vindication.walk( object, object, constraints || {}, context || object ) );
 		});
 		return res;
 	}
