@@ -73,8 +73,7 @@ var Vindication = {
 				return false;
 		}
 
-		// test regExp if not null
-		return object !== '' ? regExp.test( object ) : false;
+		return object ? regExp.test( object ) : false;
 	},
 
 	checkConstraints: function( root, object, constraints, context ) {
@@ -153,15 +152,15 @@ var Vindication = {
 };
 
 module.exports = {
-	version: '3.0.0',
+	version: '3.0.1',
 	validate: function(object, constraints, context) {
-		return Vindication.walk( object || {}, object || {}, constraints || {}, context || this );
+		return Vindication.walk( object, object, constraints || {}, context || this );
 	},
 	validateAll: function(objects, constraints, context) {
 		if( !_.isArray( objects ) ) return this.validate( objects, constraints, context );
 		var res = [];
 		objects.forEach(function(object){
-			res.push( Vindication.walk( object || {}, object || {}, constraints || {}, context || this ) );
+			res.push( Vindication.walk( object, object, constraints || {}, context || this ) );
 		});
 		return res;
 	}
