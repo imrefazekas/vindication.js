@@ -1,4 +1,4 @@
-var _ = require('lodash');
+var _ = require('./IsA');
 
 var Vindication = {
 	requiredFn: function( object, cvalue ) {
@@ -15,7 +15,7 @@ var Vindication = {
 		return this.minlengthFn( object, cvalue[ 0 ] ) && this.maxlengthFn( object, cvalue[ 1 ] );
 	},
 	elementFn: function( object, cvalue ) {
-		return _.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
+		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1;
 	},
 	minFn: function( object, cvalue ) {
 		return object && Number( object ) >= cvalue;
@@ -120,7 +120,7 @@ var Vindication = {
 		else if ( _.isRegExp( object ) ){
 			return null;
 		}
-		else if ( _.isArray( object ) ){
+		else if ( Array.isArray( object ) ){
 			res = [];
 			object.forEach(function(element){
 				var result = self.walk( root, element, constraints, context );
@@ -138,14 +138,15 @@ var Vindication = {
 			}
 			else{
 				res = {};
-				_.forEach(object, function(n, key){
+				for(var key in object){
 					if( key && constraints[key] ){
+						var n = object[key];
 						var result = self.walk( root, n, constraints[key], context );
 						if( result )
 							res[key] = result;
 					}
-				});
-				return _.keys(res).length === 0 ? null : res;
+				}
+				return Object.keys(res).length === 0 ? null : res;
 			}
 		}
 		return null;
@@ -158,7 +159,7 @@ module.exports = {
 		return Vindication.walk( object, object, constraints || {}, context || object );
 	},
 	validateAll: function(objects, constraints, context) {
-		if( !_.isArray( objects ) ) return this.validate( objects, constraints, context );
+		if( !Array.isArray( objects ) ) return this.validate( objects, constraints, context );
 		var res = [];
 		objects.forEach(function(object){
 			res.push( Vindication.walk( object, object, constraints || {}, context || object ) );
