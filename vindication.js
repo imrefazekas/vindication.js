@@ -1,4 +1,4 @@
-var _ = require('./IsA');
+var _ = require('isa.js');
 
 var Vindication = {
 	requiredFn: function( object, cvalue ) {
