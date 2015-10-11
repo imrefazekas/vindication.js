@@ -1,11 +1,12 @@
 var gulp = global.gulp = require('gulp'),
 	plugins = global.plugins = require("gulp-load-plugins")( { scope: ['devDependencies'] } );;
 
-gulp.task( 'jshint', function(callback) {
+gulp.task('eslint', function() {
 	return gulp.src( 'vindication.js' )
-		.pipe( global.plugins.jshint() )
-		.pipe( global.plugins.jshint.reporter('default' ));
-} );
+		.pipe( global.plugins.eslint() )
+		.pipe( global.plugins.eslint.format() )
+		.pipe( global.plugins.eslint.failOnError() );
+});
 
 gulp.task( 'uglify', function(callback) {
 	return gulp.src( 'vindication.js' )
@@ -14,4 +15,4 @@ gulp.task( 'uglify', function(callback) {
 		.pipe( gulp.dest('./') );
 } );
 
-gulp.task( 'default', [ 'jshint', 'uglify' ] );
+gulp.task( 'default', [ 'eslint', 'uglify' ] );
