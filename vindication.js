@@ -91,23 +91,17 @@ var Vindication = {
 			} );
 			return vals.length === 0 ? null : vals[0];
 		}
-		else for (var key in constraints){
-			if( key !== 'message' ){
-				var constraint = constraints[key];
-				if( constraint.params && constraint.condition ){
-					/*city: { equalto: {
-						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
-					} },*/
-					if( constraint.condition.call( context, object ) ){
-						var cresp = self[ key + 'Fn' ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
-						if( cresp )
-							return cresp;
+		else{
+			if( constraints.condition && !constraint.condition.call( context, object ) )
+				return null;
+			for (var key in constraints){
+				if( key !== 'message' ){
+					var constraint = constraints[key];
+					if( !constraint.condition || constraint.condition.call( context, object ) ){
+						var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
+						if( resp )
+							return resp;
 					}
-				}
-				else{
-					var resp = self[ key + 'Fn' ](object, constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
-					if( resp )
-						return resp;
 				}
 			}
 		}
