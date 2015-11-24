@@ -113,13 +113,26 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 	message : 'Custom error message'
 
 
+## Rule precondition
+
+A conditional function can be set to the rules or to a single rule as well to narrow the jurisdiction.
+
 	city: {
 		equalto: {
 			params:"Paris", condition: function(value){ return this.address.country() === 'France'; }
 		}
 	}
 
-This _equalto_ rule is validated only if the condition function returns true.
+or
+
+	city: {
+		condition: function(value){ return this.address.country() === 'France'; },
+		equalto: "Paris",
+		minlength: "3"
+	}
+
+In the first case, the rule _'equalto'_ will be applied only if the function 'condition' returns true.
+The latter case defines a ruleset, where the function _'condition'_ defines the jurisdiction of all rules defined: _'equalto' and 'minlength'.
 
 
 ## Functions
