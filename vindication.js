@@ -92,10 +92,10 @@ var Vindication = {
 			return vals.length === 0 ? null : vals[0];
 		}
 		else{
-			if( constraints.condition && !constraint.condition.call( context, object ) )
+			if( constraints.condition && !constraints.condition.call( context, object ) )
 				return null;
 			for (var key in constraints){
-				if( key !== 'message' ){
+				if( key !== 'message' && key !== 'condition' ){
 					var constraint = constraints[key];
 					if( !constraint.condition || constraint.condition.call( context, object ) ){
 						var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
