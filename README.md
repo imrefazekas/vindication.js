@@ -64,7 +64,7 @@ In JS code:
 			address:{
 				country: { minlength: 6, element: ["Germany"] },
 				city: { equalto: {
-						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+						params: "Monaco", condition: function(value){ return this.address.country() === 'France'; }
 				} },
 				zipCode: { range: [10000, 100000] },
 				street: { length:[5, 50] }
@@ -115,7 +115,7 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 
 	city: {
 		equalto: {
-			params:"Paris", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
+			params:"Paris", condition: function(value){ return this.address.country() === 'France'; }
 		}
 	}
 

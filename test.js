@@ -30,7 +30,7 @@ var rules = {
 	address: {
 		country: { minlength: 6, element: ["France"] },
 		city: { equalto: {
-				params: "Monaco", condition: function(viewModel){ return viewModel.address.country === 'France'; }
+			params: "Monaco", condition: function( value ){ return this.address.country === 'France'; }
 		} },
 		zipCode: { range: [10000, 100000] },
 		street: { length: "[5, 50]" }

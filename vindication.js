@@ -98,7 +98,7 @@ var Vindication = {
 					/*city: { equalto: {
 						params: "Monaco", condition: function(viewModel){ return viewModel.address.country() === 'France'; }
 					} },*/
-					if( constraint.condition( root ) ){
+					if( constraint.condition.call( context, object ) ){
 						var cresp = self[ key + 'Fn' ](object, constraint.params) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object;
 						if( cresp )
 							return cresp;
