@@ -14,7 +14,8 @@ var object = {
 		city: "Paris",
 		zipCode: 75009,
 		street: "Haussmann 40"
-	}
+	},
+	title: 'Magesty'
 };
 
 var rules = {
@@ -36,7 +37,14 @@ var rules = {
 	},
 	papers: {
 		id: { required: true }
-	}
+	},
+	title: [
+		{ element: ['Lord'] },
+		{ minlength: "5" },
+		function( value ){
+			return value === 'Sir';
+		}
+	]
 };
 
 s = f.validate( object, rules );

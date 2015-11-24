@@ -82,6 +82,15 @@ var Vindication = {
 			if( !constraints.call( context, object ) )
 				return 'This value seems to be invalid:' + ' ' + object;
 		}
+		else if( _.isArray( constraints ) ){
+			var vals = [];
+			constraints.forEach(function( constraint ){
+				var val = self.checkConstraints(root, object, constraint, context);
+				if( val )
+					vals.push( val );
+			} );
+			return vals.length === 0 ? null : vals[0];
+		}
 		else for (var key in constraints){
 			if( key !== 'message' ){
 				var constraint = constraints[key];
@@ -102,6 +111,7 @@ var Vindication = {
 				}
 			}
 		}
+		return null;
 	},
 	walk: function( root, object, constraints, context ) {
 		var self = this, res;

@@ -20,6 +20,7 @@ Features:
 - range-based validations
 - set possible values for arrays
 - customizable error messages
+- multiple rules associated to single entities
 
 
 
@@ -120,6 +121,9 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 
 This _equalto_ rule is validated only if the condition function returns true.
 
+
+## Functions
+
 Function can be also passed as constraint:
 
 	{
@@ -127,6 +131,19 @@ Function can be also passed as constraint:
 			return firstname.length < 10;
 		}
 	}
+
+
+## Array of rules
+
+A constraint can be an array of contraint encapsulating any type of contraint above or even arrays:
+
+	title: [
+		{ element: ['Lord'] },
+		{ minlength: "5" },
+		function( value ){
+			return value === 'Sir';
+		}
+	]
 
 When you call the _validate_ function of [vindication.js](https://github.com/imrefazekas/vindication.js) object, a context param can be also passed used as "this" for such function calling.
 Your function might reference to other attributes or structures.
