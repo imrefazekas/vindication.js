@@ -94,6 +94,8 @@ var Vindication = {
 		else{
 			if( constraints.condition && !constraints.condition.call( context, object ) )
 				return null;
+			if( (typeof object === 'undefined' || (object==='') || (object===null)) && !constraints.required )
+				return null;
 			for (var key in constraints){
 				if( key !== 'message' && key !== 'condition' ){
 					var constraint = constraints[key];
