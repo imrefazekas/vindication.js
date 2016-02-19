@@ -1,64 +1,63 @@
-var _ = require('isa.js');
-var f = require('./vindication');
+var f = require('./vindication')
 
-var s;
+var s
 
 var object = {
-	firstName: "Bob",
-	lastName: "Smith",
+	firstName: 'Bob',
+	lastName: 'Smith',
 	salutation: 'Dr.',
 	salary: 50000,
-	roles: [ ":::manager", "supermanager", "kingmanager", "ultramanager" ],
+	roles: [ ':::manager', 'supermanager', 'kingmanager', 'ultramanager' ],
 	address: {
-		country: "France",
-		city: "Paris",
+		country: 'France',
+		city: 'Paris',
 		zipCode: 75009,
-		street: "Haussmann 40"
+		street: 'Haussmann 40'
 	},
 	title: 'Magesty'
-};
+}
 
 var rules = {
-	firstName: { required: true, type: "alphanum" },
-	lastName: { minlength: "1", type: "alphanum" },
+	firstName: { required: true, type: 'alphanum' },
+	lastName: { minlength: '1', type: 'alphanum' },
 	salary: { min: 80000 },
 	roles: { pattern: /^\w+$/ },
-	salutation: function( value ){
-		console.log('salutation....');
-		return value !== 'Dr.';
+	salutation: function ( value ) {
+		console.log('salutation....')
+		return value !== 'Dr.'
 	},
 	address: {
-		country: { minlength: 6, element: ["France"] },
+		country: { minlength: 6, element: ['France'] },
 		city: { equalto: {
-			params: "Monaco", condition: function( value ){ return this.address.country === 'France'; }
+			params: 'Monaco', condition: function ( value ) { return this.address.country === 'France' }
 		} },
 		zipCode: { range: [10000, 100000] },
-		street: { length: "[5, 50]" }
+		street: { length: '[5, 50]' }
 	},
 	papers: {
 		id: { required: true }
 	},
 	title: [
 		{ element: ['Lord'] },
-		{ minlength: "5" },
-		function( value ){
-			return value === 'Sir';
+		{ minlength: '5' },
+		function ( value ) {
+			return value === 'Sir'
 		}
 	]
-};
+}
 
-s = f.validate( object, rules );
+s = f.validate( object, rules )
 
-console.log( s );
+console.log( s )
 
-s = f.validateAll( [object], rules );
+s = f.validateAll( [object], rules )
 
-console.log( s );
+console.log( s )
 
-s = f.validate( "", { type: "email" } );
+s = f.validate( '', { type: 'email' } )
 
-console.log( s );
+console.log( s )
 
-s = f.validate( { email: "" }, { email: { type: "email" } } );
+s = f.validate( { email: '' }, { email: { type: 'email' } } )
 
-console.log( s );
+console.log( s )

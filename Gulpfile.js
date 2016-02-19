@@ -1,18 +1,20 @@
-var gulp = global.gulp = require('gulp'),
-	plugins = global.plugins = require("gulp-load-plugins")( { scope: ['devDependencies'] } );;
+'use strict'
 
-gulp.task('eslint', function() {
+let gulp = require('gulp'),
+	plugins = require('gulp-load-plugins')( { scope: ['devDependencies'] } )
+
+gulp.task( 'lint', function (callback) {
 	return gulp.src( 'vindication.js' )
-		.pipe( global.plugins.eslint() )
-		.pipe( global.plugins.eslint.format() )
-		.pipe( global.plugins.eslint.failOnError() );
-});
+		.pipe( plugins.eslint() )
+        .pipe( plugins.eslint.format() )
+        .pipe( plugins.eslint.failAfterError() )
+} )
 
-gulp.task( 'uglify', function(callback) {
+gulp.task( 'uglify', function (callback) {
 	return gulp.src( 'vindication.js' )
-		.pipe( global.plugins.rename( 'vindication.min.js') )
-		.pipe( global.plugins.uglify( {outSourceMap: true} ) )
-		.pipe( gulp.dest('./') );
-} );
+		.pipe( plugins.rename( 'vindication.min.js') )
+		.pipe( plugins.uglify( {outSourceMap: true} ) )
+		.pipe( gulp.dest('./') )
+} )
 
-gulp.task( 'default', [ 'eslint', 'uglify' ] );
+gulp.task( 'default', [ 'lint', 'uglify' ] )
