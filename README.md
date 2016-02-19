@@ -1,6 +1,9 @@
 Vindication.js - dependency-free validation library
 
 [![NPM](https://nodei.co/npm/vindication.js.png)](https://nodei.co/npm/vindication.js/)
+
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 ========
 
 [vindication.js](https://github.com/imrefazekas/vindication.js) is an extremely small library aiding the validation processes for objects. Can be used on both server and client side, follows CommonJS module format.
