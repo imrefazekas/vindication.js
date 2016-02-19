@@ -1,6 +1,6 @@
 {
   "name": "vindication.js",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "JavaScript's function client-server synchronization helper library.",
   "homepage": "https://github.com/imrefazekas/vindication.js",
   "keywords": [
@@ -21,11 +21,11 @@
   "main": "vindication.js",
   "scripts": {},
   "dependencies": {
-    "isa.js": "^1.5.0"
+    "isa.js": "^1.6.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-eslint": "^1.1.1",
+    "gulp-eslint": "^2.0.0",
     "gulp-load-plugins": "^1.2.0",
     "gulp-mocha": "^2.2.0",
     "gulp-rename": "^1.2.2",
