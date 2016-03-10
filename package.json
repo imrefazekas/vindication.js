@@ -21,7 +21,7 @@
   "main": "vindication.js",
   "scripts": {},
   "dependencies": {
-    "isa.js": "^1.6.0"
+    "isa.js": "^1.6.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -29,7 +29,7 @@
     "gulp-load-plugins": "^1.2.0",
     "gulp-mocha": "^2.2.0",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.5.2"
+    "gulp-uglify": "^1.5.3"
 	},
 	"browser": {
 		 "fs": false,
