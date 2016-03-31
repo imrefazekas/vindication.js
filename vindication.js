@@ -96,7 +96,7 @@ var Vindication = {
 		else {
 			if ( options.ignores )
 				for ( var idx = 0; idx < options.ignores.length; ++idx )
-					if ( object[ options.ignores[idx] ] )
+					if ( constraints[ options.ignores[idx] ] )
 						return null
 			if ( constraints.condition && !constraints.condition.call( context, object ) )
 				return null
