@@ -78,7 +78,7 @@ var Vindication = {
 		return object ? regExp.test( object ) : false
 	},
 
-	checkConstraints: function ( root, object, constraints, context ) {
+	checkConstraints: function ( root, object, constraints, context, options ) {
 		var self = this
 		if ( _.isFunction( constraints ) ) {
 			if ( !constraints.call( context, object ) )
@@ -87,13 +87,17 @@ var Vindication = {
 		else if ( _.isArray( constraints ) ) {
 			var vals = []
 			constraints.forEach(function ( constraint ) {
-				var val = self.checkConstraints(root, object, constraint, context)
+				var val = self.checkConstraints(root, object, constraint, context, options)
 				if ( val )
 					vals.push( val )
 			} )
 			return vals.length === 0 ? null : vals[0]
 		}
 		else {
+			if ( options.ignores )
+				for ( var idx = 0; idx < options.ignores.length; ++idx )
+					if ( object[ options.ignores[idx] ] )
+						return null
 			if ( constraints.condition && !constraints.condition.call( context, object ) )
 				return null
 			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required )
@@ -111,19 +115,19 @@ var Vindication = {
 		}
 		return null
 	},
-	walk: function ( root, object, constraints, context ) {
+	walk: function ( root, object, constraints, context, options ) {
 		var self = this, res
 		if ( _.isString( object ) ) {
-			return self.checkConstraints( root, object, constraints, context )
+			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isBoolean( object ) ) {
-			return self.checkConstraints( root, object, constraints, context )
+			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isNumber( object ) ) {
-			return self.checkConstraints( root, object, constraints, context )
+			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isDate( object ) ) {
-			return self.checkConstraints( root, object, constraints, context )
+			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isRegExp( object ) ) {
 			return null
@@ -131,25 +135,25 @@ var Vindication = {
 		else if ( Array.isArray( object ) ) {
 			res = []
 			object.forEach(function (element) {
-				var result = self.walk( root, element, constraints, context )
+				var result = self.walk( root, element, constraints, context, options )
 				if ( result )
 					res.push( result )
 			})
 			return res.length === 0 ? null : res
 		}
 		else if ( _.isFunction( object ) ) {
-			return self.checkConstraints( root, object.call( context ), constraints, context )
+			return self.checkConstraints( root, object.call( context ), constraints, context, options )
 		}
 		else if ( _.isObject( object ) ) {
 			if ( _.isFunction( constraints ) ) {
-				return self.checkConstraints( root, object, constraints, context )
+				return self.checkConstraints( root, object, constraints, context, options )
 			}
 			else {
 				res = {}
 				for (var key in object) {
 					if ( key && constraints[key] ) {
 						var n = object[key]
-						var result = self.walk( root, n, constraints[key], context )
+						var result = self.walk( root, n, constraints[key], context, options )
 						if ( result )
 							res[key] = result
 					}
@@ -163,14 +167,14 @@ var Vindication = {
 
 module.exports = {
 	version: '3.0.2',
-	validate: function (object, constraints, context) {
-		return Vindication.walk( object, object, constraints || {}, context || object )
+	validate: function (object, constraints, context, options) {
+		return Vindication.walk( object, object, constraints || {}, context || object, options || {} )
 	},
-	validateAll: function (objects, constraints, context) {
+	validateAll: function (objects, constraints, context, options) {
 		if ( !Array.isArray( objects ) ) return this.validate( objects, constraints, context )
 		var res = []
 		objects.forEach(function (object) {
-			res.push( Vindication.walk( object, object, constraints || {}, context || object ) )
+			res.push( Vindication.walk( object, object, constraints || {}, context || object, options || {} ) )
 		})
 		return res
 	}
