@@ -165,8 +165,20 @@ var Vindication = {
 	}
 }
 
+function collectContraint (constraints, path) {
+	var chain = path.split('.')
+	var ref = constraints
+	for (var i = 0; i < chain.length && ref[ chain[i] ]; ++i )
+		ref = ref[ chain[i] ]
+	return ref
+}
+
 module.exports = {
 	version: '3.0.2',
+	validateValue: function (value, path, constraints, context, options) {
+		var constraint = collectContraint( constraints, path )
+		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
+	},
 	validate: function (object, constraints, context, options) {
 		return Vindication.walk( object, object, constraints || {}, context || object, options || {} )
 	},
