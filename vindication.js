@@ -78,7 +78,7 @@ var Vindication = {
 		return object ? regExp.test( object ) : false
 	},
 
-	checkConstraints: function ( root, object, constraints, context, options ) {
+	_checkConstraints: function ( root, object, constraints, context, options ) {
 		var self = this
 		if ( _.isFunction( constraints ) ) {
 			if ( !constraints.call( context, object ) )
@@ -114,6 +114,14 @@ var Vindication = {
 			}
 		}
 		return null
+	},
+	checkConstraints: function ( root, object, constraints, context, options ) {
+		try {
+			return this._checkConstraints( root, object, constraints, context, options )
+		}
+		catch (err) {
+			console.error(err, object, constraints)
+		}
 	},
 	walk: function ( root, object, constraints, context, options ) {
 		var self = this, res
