@@ -173,10 +173,9 @@ var Vindication = {
 	}
 }
 
-function collectContraint (constraints, path) {
-	var chain = path.split('.')
+function collectContraint (constraints, chain) {
 	var ref = constraints
-	for (var i = 0; i < chain.length && ref[ chain[i] ]; ++i )
+	for ( var i = 0; i < chain.length && ref; ++i )
 		ref = ref[ chain[i] ]
 	return ref
 }
@@ -184,7 +183,7 @@ function collectContraint (constraints, path) {
 module.exports = {
 	version: '3.0.2',
 	validateValue: function (value, path, constraints, context, options) {
-		var constraint = collectContraint( constraints, path )
+		var constraint = collectContraint( constraints, path.split('.') )
 		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
 	},
 	validate: function (object, constraints, context, options) {
