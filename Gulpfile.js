@@ -13,7 +13,7 @@ gulp.task( 'lint', function (callback) {
 gulp.task( 'uglify', function (callback) {
 	return gulp.src( 'vindication.js' )
 		.pipe( plugins.rename( 'vindication.min.js') )
-		.pipe( plugins.uglify( {outSourceMap: true} ) )
+		.pipe( plugins.uglify( { sourceMap: true } ) )
 		.pipe( gulp.dest('./') )
 } )
 
