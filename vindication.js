@@ -142,6 +142,11 @@ var Vindication = {
 		}
 		else if ( Array.isArray( object ) ) {
 			res = []
+			if ( constraints._validator ) {
+				var obj = self.checkConstraints( root, object, constraints._validator, context, options )
+				if ( obj )
+					res.push( obj )
+			}
 			object.forEach(function (element) {
 				var result = self.walk( root, element, constraints, context, options )
 				if ( result )
