@@ -11,6 +11,7 @@ var Vindication = {
 		return !object || object.length <= cvalue
 	},
 	lengthFn: function ( object, cvalue ) {
+		console.log( '...', object, cvalue )
 		if ( _.isString(cvalue) ) {
 			cvalue = JSON.parse( cvalue )
 		}

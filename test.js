@@ -14,7 +14,8 @@ var object = {
 		zipCode: 75009,
 		street: 'Haussmann 40'
 	},
-	title: 'Magesty'
+	title: 'Magesty',
+	digit: '1'
 }
 
 var rules = {
@@ -26,6 +27,7 @@ var rules = {
 		console.log('salutation....')
 		return value !== 'Dr.'
 	},
+	digit: { length: 1 },
 	address: {
 		country: { minlength: 6, element: ['France'] },
 		city: { equalto: {
