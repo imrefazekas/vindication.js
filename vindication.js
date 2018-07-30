@@ -190,7 +190,6 @@ function collectContraint (constraints, chain) {
 }
 
 module.exports = {
-	version: '3.0.2',
 	validateValue: function (value, path, constraints, context, options) {
 		var constraint = collectContraint( constraints, path.split('.') )
 		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
