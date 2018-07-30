@@ -23,8 +23,7 @@
   "dependencies": {
     "isa.js": "^2.2.2"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "browser": {
     "fs": false,
     "child_process": false
