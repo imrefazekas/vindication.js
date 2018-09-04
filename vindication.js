@@ -1,5 +1,18 @@
 var _ = require('isa.js')
 
+var regexes = {
+	number: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/,
+	digits: /^\d+$/,
+	integer: /^-?\d+$/,
+	alphanum: /^\w+$/,
+	password: /^\S+$/,
+	name: /^[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+$/,
+	email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+	url: new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)', 'i'),
+	dateIso: /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/,
+	phone: /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
+}
+
 var Vindication = {
 	requiredFn: function ( object, cvalue ) {
 		return !cvalue || object
@@ -45,43 +58,12 @@ var Vindication = {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
 	typeFn: function ( object, cvalue ) {
-		var regExp
+		var regExp = regexes[ cvalue ]
 
-		switch ( cvalue ) {
-		case 'number':
-			regExp = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
-			break
-		case 'digits':
-			regExp = /^\d+$/
-			break
-		case 'integer':
-			regExp = /^-?\d+$/
-			break
-		case 'alphanum':
-			regExp = /^\w+$/
-			break
-		case 'name':
-			regExp = /^[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+$/
-			break
-		case 'email':
-			regExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
-			break
-		case 'url':
-			regExp = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)', 'i')
-			break
-		case 'dateIso':
-			regExp = /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/
-			break
-		case 'phone':
-			regExp = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
-			break
-		default:
-			return false
-		}
+		if (!regExp) return false
 
 		return object ? regExp.test( object ) : false
 	},
-
 	_checkConstraints: function ( root, object, constraints, context, options ) {
 		var self = this
 		if ( _.isFunction( constraints ) ) {
@@ -193,6 +175,9 @@ function collectContraint (constraints, chain) {
 }
 
 module.exports = {
+	changeRegex: function (name, regex) {
+		regexes[ name ] = regex
+	},
 	validateValue: function (value, path, constraints, context, options) {
 		var constraint = collectContraint( constraints, path.split('.') )
 		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
