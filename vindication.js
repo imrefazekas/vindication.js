@@ -5,7 +5,7 @@ var regexes = {
 	digits: /^\d+$/,
 	integer: /^-?\d+$/,
 	alphanum: /^\w+$/,
-	password: /^\S+$/,
+	password: /^\S{8,16}$/,
 	name: /^[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+$/,
 	email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
 	url: new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)', 'i'),
