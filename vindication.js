@@ -60,6 +60,9 @@ var Vindication = {
 		case 'alphanum':
 			regExp = /^\w+$/
 			break
+		case 'name':
+			regExp = /^[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+\.?\s?[a-zA-Z\u00C0-\u017F]+$/
+			break
 		case 'email':
 			regExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 			break
