@@ -89,7 +89,7 @@ var Vindication = {
 			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required )
 				return null
 			for (var key in constraints) {
-				if ( key !== 'message' && key !== 'condition' ) {
+				if ( key !== 'message' && key !== 'condition' && key !== 'type' ) {
 					var constraint = constraints[key]
 					if ( !constraint.condition || constraint.condition.call( context, object ) ) {
 						var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object
@@ -98,6 +98,8 @@ var Vindication = {
 					}
 				}
 			}
+			if (constraints.type)
+				return self.typeFn(object, constraints.type) ? null : 'This value seems to be invalid: ' + object
 		}
 		return null
 	},

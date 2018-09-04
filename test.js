@@ -3,7 +3,7 @@ var f = require('./vindication')
 var s
 
 var object = {
-	firstName: 'Bob',
+	firstName: '  ? ',
 	lastName: 'Smith',
 	salutation: 'Dr.',
 	salary: 50000,
@@ -19,7 +19,7 @@ var object = {
 }
 
 var rules = {
-	firstName: { required: true, type: 'alphanum' },
+	firstName: { required: true, type: 'name' },
 	lastName: { minlength: '1', type: 'alphanum' },
 	salary: { min: 80000 },
 	roles: { pattern: /^\w+$/ },
@@ -50,7 +50,7 @@ var rules = {
 
 s = f.validate( object, rules )
 
-console.log( s )
+console.log( '>>', s )
 
 s = f.validateAll( [object], rules )
 
