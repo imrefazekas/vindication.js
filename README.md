@@ -19,7 +19,7 @@ Features:
 - regular expression rules
 - validator functions for complex scenarios and/or structured objects
 - conditional validation: validation rule based on a condition evaluated in real-time
-- built-in type rules: number, digits, integer, alphanum, email, url, dateIso, phone
+- built-in type rules: number, digits, integer, alphanum, password, name, address, email, url, dateIso, phone
 - range-based validations
 - set possible values for arrays
 - customizable error messages
@@ -39,43 +39,43 @@ Command line:
 
 In JS code:
 
-	var v = require('./vindication');
+	let v = require('vindication.js')
 	...
-	var s = v.validate(
+	let s = v.validate(
 		{
-			firstName: "Bob",
-			lastName: "Smith",
+			firstName: 'Bob',
+			lastName: 'Smith',
 			salutation: 'Dr.',
 			salary: 50000,
-			roles: [ ":::manager", "supermanager", "kingmanager", "ultramanager" ],
+			roles: [ ':::manager', 'supermanager', 'kingmanager', 'ultramanager' ],
 			address:{
-				country: "France",
-				city: "Paris",
+				country: 'France',
+				city: 'Paris',
 				zipCode: 75009,
-				street: "Haussmann 40"
+				street: 'Haussmann 40'
 			}
 		},
 		{
-			firstName: { required: true, type: "alphanum" },
-			lastName: { minlength: "1", type: "alphanum" },
+			firstName: { required: true, type: 'alphanum' },
+			lastName: { minlength: '1', type: 'alphanum' },
 			salary: { min: 80000 },
 			roles: { pattern:/^\w+$/ },
 			salutation: function( value ){
-				console.log('salutation....');
-				return value !== 'Dr.';
+				console.log('salutation....')
+				return value !== 'Dr.'
 			},
 			address:{
-				country: { minlength: 6, element: ["Germany"] },
+				country: { minlength: 6, element: ['Germany'] },
 				city: { equalto: {
-						params: "Monaco", condition: function(value){ return this.address.country() === 'France'; }
+						params: 'Monaco', condition: function(value){ return this.address.country() === 'France' }
 				} },
 				zipCode: { range: [10000, 100000] },
 				street: { length:[5, 50] }
 			}
 		}
-	);
+	)
 
-	console.log( s );
+	console.log( s )
 
 Result:
 
@@ -122,16 +122,16 @@ A conditional function can be set to the rules or to a single rule as well to na
 
 	city: {
 		equalto: {
-			params:"Paris", condition: function(value){ return this.address.country() === 'France'; }
+			params: 'Paris', condition: function(value){ return this.address.country() === 'France' }
 		}
 	}
 
 or
 
 	city: {
-		condition: function(value){ return this.address.country() === 'France'; },
-		equalto: "Paris",
-		minlength: "3"
+		condition: function(value){ return this.address.country() === 'France' },
+		equalto: 'Paris',
+		minlength: '3'
 	}
 
 In the first case, the rule _'equalto'_ will be applied only if the function 'condition' returns true.
@@ -155,16 +155,16 @@ A constraint can be an array of contraint encapsulating any type of contraint ab
 
 	title: [
 		{ element: ['Lord'] },
-		{ minlength: "5" },
+		{ minlength: '5' },
 		function( value ){
-			return value === 'Sir';
+			return value === 'Sir'
 		}
 	]
 
 When you call the _validate_ function of [vindication.js](https://github.com/imrefazekas/vindication.js) object, a context param can be also passed used as "this" for such function calling.
 Your function might reference to other attributes or structures.
 
-	var s = v.validate( obj, rules, obj );
+	let s = v.validate( obj, rules, obj )
 
 
 Note: When a rule object is set to an array, all object enclosed by the array will be validated.
@@ -185,3 +185,11 @@ All objects will be validated, and the returning object will contain the validat
 			address: { city: 'This value seems to be invalid: Paris' }
 		}
 	]
+
+## Custom field types & regexps
+
+Vindication can be altered to adopt new types or new regexp definitions for existing types as follows:
+
+	v.changeRegex( 'password', /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\u00C0-\u017F]{8,}$/ )
+	or 
+	v.changeRegex( 'strict', /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\u00C0-\u017F!"#$%&'()*+,-./:;<=>?@[]\^_`{\|}~]{16,}$/ )

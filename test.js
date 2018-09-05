@@ -3,7 +3,7 @@ var f = require('./vindication')
 var s
 
 var object = {
-	firstName: '  ? ',
+	firstName: 'Hajdú-Bihar',
 	lastName: 'Smith',
 	salutation: 'Dr.',
 	salary: 50000,
