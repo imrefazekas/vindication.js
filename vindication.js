@@ -16,7 +16,7 @@ var regexes = {
 
 var Vindication = {
 	requiredFn: function ( object, cvalue ) {
-		return !cvalue || object
+		return !cvalue || object || _.isNumber(object)
 	},
 	minlengthFn: function ( object, cvalue ) {
 		return object && object.length >= cvalue
@@ -25,7 +25,6 @@ var Vindication = {
 		return !object || object.length <= cvalue
 	},
 	lengthFn: function ( object, cvalue ) {
-		console.log( '...', object, cvalue )
 		if ( _.isString(cvalue) ) {
 			cvalue = JSON.parse( cvalue )
 		}
@@ -35,13 +34,13 @@ var Vindication = {
 		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1
 	},
 	minFn: function ( object, cvalue ) {
-		return object && Number( object ) >= cvalue
+		return _.isNumber(object) && object >= cvalue
 	},
 	maxFn: function ( object, cvalue ) {
-		return object && Number( object ) <= cvalue
+		return _.isNumber(object) && object <= cvalue
 	},
 	rangeFn: function ( object, cvalue ) {
-		return object && object >= cvalue[ 0 ] && object <= cvalue[ 1 ]
+		return _.isNumber(object) && object >= cvalue[ 0 ] && object <= cvalue[ 1 ]
 	},
 	patternFn: function ( object, cvalue ) {
 		return new RegExp( cvalue ).test( object )
