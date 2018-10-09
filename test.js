@@ -48,6 +48,7 @@ var rules = {
 	]
 }
 
+/*
 s = f.validate( object, rules )
 
 console.log( '>>', s )
@@ -65,3 +66,19 @@ s = f.validate( { email: '' }, { email: { type: 'email' } } )
 console.log( s )
 
 s = f.validateValue( 'a@b.hu', 'thing.email', { thing: { email: { type: 'email' } } } )
+*/
+
+
+let testVal = {
+	fee: {
+		side: { required: true, element: [ 'BUYER' ] }
+	}
+}
+let testObj = {
+	fee:
+	{
+		side: undefined
+	}
+}
+
+console.log( f.validate( testObj, testVal ) )

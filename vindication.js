@@ -114,7 +114,10 @@ var Vindication = {
 	},
 	walk: function ( root, object, constraints, context, options ) {
 		var self = this, res
-		if ( _.isString( object ) ) {
+		if ( (typeof (object) === 'undefined' || object === null) && constraints ) {
+			return self.checkConstraints( root, object, constraints, context, options )
+		}
+		else if ( _.isString( object ) ) {
 			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isBoolean( object ) ) {
