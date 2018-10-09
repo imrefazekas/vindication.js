@@ -34,8 +34,14 @@ var Vindication = {
 	elementFn: function ( object, cvalue ) {
 		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1
 	},
+	greaterFn: function ( object, cvalue ) {
+		return _.isNumber(object) && object > cvalue
+	},
 	minFn: function ( object, cvalue ) {
 		return _.isNumber(object) && object >= cvalue
+	},
+	lessFn: function ( object, cvalue ) {
+		return _.isNumber(object) && object < cvalue
 	},
 	maxFn: function ( object, cvalue ) {
 		return _.isNumber(object) && object <= cvalue

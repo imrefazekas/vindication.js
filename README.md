@@ -15,7 +15,7 @@ The data object will be iterated through recursively along/parallel with the con
 
 Features:
 
-- simple value-based rules: required, notblank, minlength, maxlength, length, range, pattern, min, max, equalto, before, after ...
+- simple value-based rules: required, notblank, minlength, maxlength, length, range, pattern, greater, less, min, max, equalto, before, after ...
 - regular expression rules
 - validator functions for complex scenarios and/or structured objects
 - conditional validation: validation rule based on a condition evaluated in real-time
@@ -102,7 +102,9 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 	minlength : 6
 	maxlength : 6
 	length: [5,10]
+	greater : 6
 	min : 6
+	less : 100
 	max : 100
 	element : [ 'PossibleValue1', 'PossibleValue2' ]
 	range : [6, 100]
@@ -191,5 +193,5 @@ All objects will be validated, and the returning object will contain the validat
 Vindication can be altered to adopt new types or new regexp definitions for existing types as follows:
 
 	v.changeRegex( 'password', /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\u00C0-\u017F]{8,}$/ )
-	or 
+	or
 	v.changeRegex( 'strict', /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\u00C0-\u017F!"#$%&'()*+,-./:;<=>?@[]\^_`{\|}~]{16,}$/ )
