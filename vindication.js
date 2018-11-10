@@ -160,7 +160,7 @@ var Vindication = {
 			return res.length === 0 ? null : res
 		}
 		else if ( _.isFunction( object ) ) {
-			return self.checkConstraints( root, object.call( context ), constraints, context, options )
+			return self.checkConstraints( root, constraints && constraints.type === 'function' ? object : object.call( context ), constraints, context, options )
 		}
 		else if ( _.isObject( object ) ) {
 			if ( _.isFunction( constraints ) ) {
