@@ -65,6 +65,13 @@ var Vindication = {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
 	typeFn: function ( object, cvalue ) {
+		if (cvalue === 'function')
+			return _.isFunction( object )
+		else if (cvalue === 'string')
+			return _.isString( object )
+		else if (cvalue === 'array')
+			return Array.isArray( object )
+
 		var regExp = regexes[ cvalue ]
 
 		if (!regExp) return false

@@ -19,7 +19,7 @@ Features:
 - regular expression rules
 - validator functions for complex scenarios and/or structured objects
 - conditional validation: validation rule based on a condition evaluated in real-time
-- built-in type rules: number, digits, integer, alphanum, password, name, address, email, url, dateIso, phone
+- built-in type rules: number, digits, integer, alphanum, password, name, address, email, url, dateIso, phone, string, function, array
 - range-based validations
 - set possible values for arrays
 - customizable error messages
