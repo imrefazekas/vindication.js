@@ -118,9 +118,21 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 	message : 'Custom error message'
 
 
+## Rule conversion
+
+A conversion function can be passed to be called before any validation step in order to perform any transformation you might need on that given object
+
+	city: {
+		equalto: {
+			params: 'Paris', convert: function(value, root){ return value.toUpperCase() }
+		}
+	}
+
+
 ## Rule precondition
 
 A conditional function can be set to the rules or to a single rule as well to narrow the jurisdiction.
+
 
 	city: {
 		equalto: {
@@ -136,6 +148,7 @@ or
 		minlength: '3'
 	}
 
+
 In the first case, the rule _'equalto'_ will be applied only if the function 'condition' returns true.
 The latter case defines a ruleset, where the function _'condition'_ defines the jurisdiction of all rules defined: _'equalto' and 'minlength'.
 
@@ -143,6 +156,7 @@ The latter case defines a ruleset, where the function _'condition'_ defines the 
 ## Functions
 
 Function can be also passed as constraint:
+
 
 	{
 		firstname: function(value){
@@ -155,6 +169,7 @@ Function can be also passed as constraint:
 
 A constraint can be an array of contraint encapsulating any type of contraint above or even arrays:
 
+
 	title: [
 		{ element: ['Lord'] },
 		{ minlength: '5' },
@@ -163,8 +178,10 @@ A constraint can be an array of contraint encapsulating any type of contraint ab
 		}
 	]
 
+
 When you call the _validate_ function of [vindication.js](https://github.com/imrefazekas/vindication.js) object, a context param can be also passed used as "this" for such function calling.
 Your function might reference to other attributes or structures.
+
 
 	let s = v.validate( obj, rules, obj )
 

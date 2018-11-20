@@ -100,6 +100,8 @@ var Vindication = {
 						return null
 			if ( constraints.condition && !constraints.condition.call( context, object ) )
 				return null
+			if ( constraints.convert )
+				object = constraints.convert.call( context, object, root )
 			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required )
 				return null
 			for (var key in constraints) {
