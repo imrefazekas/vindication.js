@@ -213,5 +213,23 @@ module.exports = {
 			res.push( Vindication.walk( object, object, constraints || {}, context || object, options || {} ) )
 		})
 		return res
+	},
+	validateByProto: function (object, prototype, options = {}) {
+		if (!prototype) return true
+		if (!object) throw new Error('Object seem to be empty')
+
+		let protoKeys = Object.keys( prototype )
+		for (let protoKey of protoKeys)
+			if ( !object.hasOwnProperty( protoKey ) )
+				throw new Error('Property is missing: ' + protoKey)
+
+		let addKeys = Object.keys( object ).filter( (key) => { return !protoKeys.includes(key) } )
+		if (addKeys.length > 0)
+			throw new Error('Additional properties detected: ' + addKeys.join(', ') )
+		return true
+	},
+	pick: function (object, predicate) {
+		return _.pick( object, predicate )
 	}
+
 }

@@ -82,3 +82,5 @@ let testObj = {
 }
 
 console.log( f.validate( testObj, testVal ) )
+
+console.log( f.validateByProto( { name: 'almafa', address: 'almafa' }, { address: 'almafa' } ) )
