@@ -17,7 +17,7 @@ var regexes = {
 
 var Vindication = {
 	requiredFn: function ( object, cvalue ) {
-		return !cvalue || object || _.isNumber(object)
+		return !cvalue || object || _.isNumber(object) || _.isBoolean(object)
 	},
 	minlengthFn: function ( object, cvalue ) {
 		return object && object.length >= cvalue

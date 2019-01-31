@@ -15,7 +15,8 @@ var object = {
 		street: 'Haussmann 40'
 	},
 	title: 'Magesty',
-	digit: '1'
+	digit: '1',
+	registered: false
 }
 
 var rules = {
@@ -45,7 +46,10 @@ var rules = {
 		function ( value ) {
 			return value === 'Sir'
 		}
-	]
+	],
+	registered: {
+		required: true
+	}
 }
 
 /*
