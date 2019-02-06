@@ -15,6 +15,15 @@ var regexes = {
 	phone: /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
 }
 
+let props = [
+	'required', 'minlength',
+	'maxlength', 'length',
+	'element', 'greater', 'min',
+	'less', 'max',
+	'range', 'pattern', 'equalto', 'before',
+	'after', 'type', 'notblank'
+]
+
 var Vindication = {
 	requiredFn: function ( object, cvalue ) {
 		return !cvalue || object || _.isNumber(object) || _.isBoolean(object)
@@ -55,7 +64,7 @@ var Vindication = {
 	equaltoFn: function ( object, cvalue ) {
 		return object === cvalue
 	},
-	notblank: function ( object, cvalue ) {
+	notblankFn: function ( object, cvalue ) {
 		return !cvalue || this.minlengthFn( object, 1 )
 	},
 	beforeFn: function ( object, cvalue ) {
@@ -108,6 +117,8 @@ var Vindication = {
 				if ( key !== 'message' && key !== 'condition' && key !== 'type' ) {
 					var constraint = constraints[key]
 					if ( !constraint.condition || constraint.condition.call( context, object ) ) {
+						if (!self[ key + 'Fn' ])
+							return 'This constraint is invalid: ' + key
 						var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object
 						if ( resp )
 							return resp
@@ -175,6 +186,7 @@ var Vindication = {
 				}
 				else {
 					let keys = Object.keys( options.sourceBased ? object : constraints )
+					if ( !keys.find( (key) => { return props.includes( key ) } ) ) return null
 					for (let key of keys) {
 						if ( key && constraints[key] ) {
 							var n = object[key]
