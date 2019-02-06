@@ -173,12 +173,15 @@ var Vindication = {
 				if ( constraints._validator ) {
 					return self.checkConstraints( root, object, constraints._validator, context, options )
 				}
-				else for (var key in object) {
-					if ( key && constraints[key] ) {
-						var n = object[key]
-						var result = self.walk( root, n, constraints[key], context, options )
-						if ( result )
-							res[key] = result
+				else {
+					let keys = Object.keys( options.sourceBased ? object : constraints )
+					for (let key of keys) {
+						if ( key && constraints[key] ) {
+							var n = object[key]
+							var result = self.walk( root, n, constraints[key], context, options )
+							if ( result )
+								res[key] = result
+						}
 					}
 				}
 				return Object.keys(res).length === 0 ? null : res

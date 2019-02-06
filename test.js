@@ -29,6 +29,7 @@ var rules = {
 		return value !== 'Dr.'
 	},
 	digit: { length: 1 },
+	hablaty: { required: true },
 	address: {
 		country: { minlength: 6, element: ['France'] },
 		city: { equalto: {
@@ -52,7 +53,6 @@ var rules = {
 	}
 }
 
-/*
 s = f.validate( object, rules )
 
 console.log( '>>', s )
@@ -70,7 +70,6 @@ s = f.validate( { email: '' }, { email: { type: 'email' } } )
 console.log( s )
 
 s = f.validateValue( 'a@b.hu', 'thing.email', { thing: { email: { type: 'email' } } } )
-*/
 
 
 let testVal = {
