@@ -186,7 +186,7 @@ var Vindication = {
 				}
 				else {
 					let keys = Object.keys( options.sourceBased ? object : constraints )
-					if ( !keys.find( (key) => { return props.includes( key ) } ) ) return null
+					if ( keys.find( (key) => { return props.includes( key ) } ) ) return null
 					for (let key of keys) {
 						if ( key && constraints[key] ) {
 							var n = object[key]
