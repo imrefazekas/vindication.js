@@ -1,7 +1,7 @@
 var _ = require('isa.js')
 
 var regexes = {
-	number: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/,
+	numeric: /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/,
 	digits: /^\d+$/,
 	integer: /^-?\d+$/,
 	alphanum: /^\w+$/,
