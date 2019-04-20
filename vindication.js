@@ -82,10 +82,12 @@ var Vindication = {
 			return Array.isArray( object )
 
 		var regExp = regexes[ cvalue ]
-
 		if (!regExp) return false
 
-		return object ? regExp.test( object ) : false
+		let exists = typeof ( object ) !== 'undefined' && object !== null
+		if (!exists) return false
+
+		return regExp.test( _.isString( object ) ? object : object + '' )
 	},
 	_checkConstraints: function ( root, object, constraints, context, options ) {
 		var self = this

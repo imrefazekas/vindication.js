@@ -1,5 +1,5 @@
 var f = require('./vindication')
-
+/*
 var s
 
 var object = {
@@ -87,3 +87,12 @@ let testObj = {
 console.log( f.validate( testObj, testVal ) )
 
 console.log( f.validateByProto( { name: 'almafa', address: 'almafa' }, { address: 'almafa' } ) )
+*/
+
+let Asset = {
+	amount: 0
+}
+let AssetValidation = {
+	amount: { required: false, type: 'number' }
+}
+console.log( f.validate( Asset, AssetValidation ) )
