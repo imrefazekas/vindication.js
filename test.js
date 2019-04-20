@@ -90,7 +90,7 @@ console.log( f.validateByProto( { name: 'almafa', address: 'almafa' }, { address
 */
 
 let Asset = {
-	amount: 'ASS-1'
+	amount: 'ASS-X-2'
 }
 let AssetValidation = {
 	amount: { required: false, type: 'name' }

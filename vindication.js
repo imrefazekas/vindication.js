@@ -80,6 +80,8 @@ var Vindication = {
 			return _.isString( object )
 		else if (cvalue === 'array')
 			return Array.isArray( object )
+		else if (cvalue === 'number')
+			return typeof ( object ) !== 'undefined' && object !== null && _.isNumber( object )
 
 		var regExp = regexes[ cvalue ]
 		if (!regExp) return false
