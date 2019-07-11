@@ -29,7 +29,7 @@ var Vindication = {
 		return !cvalue || (object && Object.keys( object ).length > 0)
 	},
 	requiredFn: function ( object, cvalue ) {
-		return !cvalue || object || _.isNumber(object) || _.isBoolean(object)
+		return !cvalue || object || object === '' || _.isNumber(object) || _.isBoolean(object)
 	},
 	minlengthFn: function ( object, cvalue ) {
 		return object && object.length >= cvalue

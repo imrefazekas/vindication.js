@@ -17,7 +17,8 @@ var object = {
 	title: 'Magesty',
 	digit: '1',
 	registered: false,
-	somedata: { hello: 'huh' }
+	somedata: { hello: 'huh' },
+	empty: ''
 }
 
 var rules = {
@@ -25,6 +26,7 @@ var rules = {
 	lastName: { minlength: '1', typeof: 'alphanum' },
 	salary: { min: 80000 },
 	roles: { pattern: /^\w+$/ },
+	empty: { required: true },
 	salutation: function ( value ) {
 		console.log('salutation....')
 		return value !== 'Dr.'
