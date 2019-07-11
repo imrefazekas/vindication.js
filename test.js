@@ -1,5 +1,5 @@
 var f = require('./vindication')
-/*
+
 var s
 
 var object = {
@@ -16,7 +16,8 @@ var object = {
 	},
 	title: 'Magesty',
 	digit: '1',
-	registered: false
+	registered: false,
+	somedata: { hello: 'huh' }
 }
 
 var rules = {
@@ -50,6 +51,11 @@ var rules = {
 	],
 	registered: {
 		required: true
+	},
+	somedata: {
+		required: true,
+		hasKey: true,
+		keyElement: [ 'hello' ]
 	}
 }
 
@@ -57,6 +63,7 @@ s = f.validate( object, rules )
 
 console.log( '>>', s )
 
+/*
 s = f.validateAll( [object], rules )
 
 console.log( s )
@@ -87,7 +94,7 @@ let testObj = {
 console.log( f.validate( testObj, testVal ) )
 
 console.log( f.validateByProto( { name: 'almafa', address: 'almafa' }, { address: 'almafa' } ) )
-*/
+
 
 let Asset = {
 	amount: 'ASS-X-2'
@@ -96,3 +103,4 @@ let AssetValidation = {
 	amount: { required: false, type: 'name' }
 }
 console.log( f.validate( Asset, AssetValidation ) )
+*/

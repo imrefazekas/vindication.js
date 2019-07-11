@@ -16,16 +16,16 @@ var regexes = {
 }
 
 let props = [
-	'required', 'hasKeys', 'minlength',
+	'required', 'hasKey', 'minlength',
 	'maxlength', 'length',
-	'element', 'keysElement', 'greater', 'min',
+	'element', 'keyElement', 'greater', 'min',
 	'less', 'max',
 	'range', 'pattern', 'equalto', 'before',
 	'after', 'type', 'notblank'
 ]
 
 var Vindication = {
-	hasKeysFn: function ( object, cvalue ) {
+	hasKeyFn: function ( object, cvalue ) {
 		return !cvalue || (object && Object.keys( object ).length > 0)
 	},
 	requiredFn: function ( object, cvalue ) {
@@ -46,7 +46,7 @@ var Vindication = {
 	elementFn: function ( object, cvalue ) {
 		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1
 	},
-	keysElementFn: function ( object, cvalue ) {
+	keyElementFn: function ( object, cvalue ) {
 		return Array.isArray(cvalue) && Object.keys(object).filter( (value) => { return cvalue.indexOf( value ) !== -1 } ).length === Object.keys(object).length
 	},
 	greaterFn: function ( object, cvalue ) {
@@ -196,7 +196,8 @@ var Vindication = {
 				}
 				else {
 					let keys = Object.keys( options.sourceBased ? object : constraints )
-					if ( keys.find( (key) => { return props.includes( key ) } ) ) return null
+					if ( keys.find( (key) => { return props.includes( key ) } ) )
+						return self.checkConstraints( root, object, constraints, context, options )
 					for (let key of keys) {
 						if ( key && constraints[key] ) {
 							var n = object[key]
