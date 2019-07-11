@@ -19,7 +19,7 @@ var object = {
 			},
 			detailsOfPayments: { required: false, maxlength: '35', message: 'Special error on details of Payment' }
 		},
-		name: { type: 'name' }
+		name: { typeof: 'name' }
 	}
 }
 

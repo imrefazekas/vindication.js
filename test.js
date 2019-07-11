@@ -21,8 +21,8 @@ var object = {
 }
 
 var rules = {
-	firstName: { required: true, type: 'name' },
-	lastName: { minlength: '1', type: 'alphanum' },
+	firstName: { required: true, typeof: 'name' },
+	lastName: { minlength: '1', typeof: 'alphanum' },
 	salary: { min: 80000 },
 	roles: { pattern: /^\w+$/ },
 	salutation: function ( value ) {
@@ -68,15 +68,15 @@ s = f.validateAll( [object], rules )
 
 console.log( s )
 
-s = f.validate( '', { type: 'email' } )
+s = f.validate( '', { typeof: 'email' } )
 
 console.log( s )
 
-s = f.validate( { email: '' }, { email: { type: 'email' } } )
+s = f.validate( { email: '' }, { email: { typeof: 'email' } } )
 
 console.log( s )
 
-s = f.validateValue( 'a@b.hu', 'thing.email', { thing: { email: { type: 'email' } } } )
+s = f.validateValue( 'a@b.hu', 'thing.email', { thing: { email: { typeof: 'email' } } } )
 
 
 let testVal = {
@@ -100,7 +100,7 @@ let Asset = {
 	amount: 'ASS-X-2'
 }
 let AssetValidation = {
-	amount: { required: false, type: 'name' }
+	amount: { required: false, typeof: 'name' }
 }
 console.log( f.validate( Asset, AssetValidation ) )
 */

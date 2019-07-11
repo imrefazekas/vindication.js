@@ -56,8 +56,8 @@ In JS code:
 			}
 		},
 		{
-			firstName: { required: true, type: 'alphanum' },
-			lastName: { minlength: '1', type: 'alphanum' },
+			firstName: { required: true, typeof: 'alphanum' },
+			lastName: { minlength: '1', typeof: 'alphanum' },
 			salary: { min: 80000 },
 			roles: { pattern:/^\w+$/ },
 			salutation: function( value ){
@@ -95,7 +95,7 @@ Result:
 The rule syntax is simple as 1.
 For every attribute inside an object at a given level, you can define a rule object possessing a subset of the following definitions:
 
-required, hasKey, element, keyElement, type, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
+required, hasKey, element, keyElement, typeof, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
 
 	required : true
 	notblank: true
@@ -115,7 +115,7 @@ required, hasKey, element, keyElement, type, notblank, notblank, minlength, maxl
 	before: new Date()
 	after: new Date()
 
-	type : 'email'
+	typeof : 'email'
 
 	message : 'Custom error message'
 
