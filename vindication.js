@@ -21,7 +21,7 @@ let props = [
 	'element', 'keyElement', 'greater', 'min',
 	'less', 'max',
 	'range', 'pattern', 'equalto', 'before',
-	'after', 'type', 'notblank'
+	'after', 'typeof', 'notblank'
 ]
 
 var Vindication = {
@@ -79,7 +79,7 @@ var Vindication = {
 	afterFn: function ( object, cvalue ) {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
-	typeFn: function ( object, cvalue ) {
+	typeofFn: function ( object, cvalue ) {
 		if (cvalue === 'function')
 			return _.isFunction( object )
 		else if (cvalue === 'string')
@@ -124,7 +124,7 @@ var Vindication = {
 			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required )
 				return null
 			for (var key in constraints) {
-				if ( key !== 'message' && key !== 'condition' && key !== 'type' ) {
+				if ( key !== 'message' && key !== 'condition' && key !== 'typeof' ) {
 					var constraint = constraints[key]
 					if ( !constraint.condition || constraint.condition.call( context, object ) ) {
 						if (!self[ key + 'Fn' ])
@@ -135,8 +135,8 @@ var Vindication = {
 					}
 				}
 			}
-			if (constraints.type)
-				return self.typeFn(object, constraints.type) ? null : 'This value seems to be invalid: ' + object
+			if (constraints.typeof)
+				return self.typeofFn(object, constraints.typeof) ? null : 'This value seems to be invalid: ' + object
 		}
 		return null
 	},
@@ -183,7 +183,7 @@ var Vindication = {
 			return res.length === 0 ? null : res
 		}
 		else if ( _.isFunction( object ) ) {
-			return self.checkConstraints( root, constraints && constraints.type === 'function' ? object : object.call( context ), constraints, context, options )
+			return self.checkConstraints( root, constraints && constraints.typeof === 'function' ? object : object.call( context ), constraints, context, options )
 		}
 		else if ( _.isObject( object ) ) {
 			if ( _.isFunction( constraints ) ) {
