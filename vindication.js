@@ -16,15 +16,18 @@ var regexes = {
 }
 
 let props = [
-	'required', 'minlength',
+	'required', 'hasKeys', 'minlength',
 	'maxlength', 'length',
-	'element', 'greater', 'min',
+	'element', 'keysElement', 'greater', 'min',
 	'less', 'max',
 	'range', 'pattern', 'equalto', 'before',
 	'after', 'type', 'notblank'
 ]
 
 var Vindication = {
+	hasKeysFn: function ( object, cvalue ) {
+		return !cvalue || (object && Object.keys( object ).length > 0)
+	},
 	requiredFn: function ( object, cvalue ) {
 		return !cvalue || object || _.isNumber(object) || _.isBoolean(object)
 	},
@@ -42,6 +45,9 @@ var Vindication = {
 	},
 	elementFn: function ( object, cvalue ) {
 		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1
+	},
+	keysElementFn: function ( object, cvalue ) {
+		return Array.isArray(cvalue) && Object.keys(object).filter( (value) => { return cvalue.indexOf( value ) !== -1 } ).length === Object.keys(object).length
 	},
 	greaterFn: function ( object, cvalue ) {
 		return _.isNumber(object) && object > cvalue

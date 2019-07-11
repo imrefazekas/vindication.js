@@ -95,7 +95,7 @@ Result:
 The rule syntax is simple as 1.
 For every attribute inside an object at a given level, you can define a rule object possessing a subset of the following definitions:
 
-required, notblank, minlength, maxlength, length, range, pattern, min, max, equalto, before, after
+required, hasKeys, element, keysElement, type, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
 
 	required : true
 	notblank: true
@@ -107,6 +107,8 @@ required, notblank, minlength, maxlength, length, range, pattern, min, max, equa
 	less : 100
 	max : 100
 	element : [ 'PossibleValue1', 'PossibleValue2' ]
+	hasKeys: true
+	keysElement: [ 'length' ], 
 	range : [6, 100]
 	pattern : '<regexp>'
 	equalto : '#elem'
