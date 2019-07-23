@@ -25,61 +25,61 @@ let props = [
 ]
 
 var Vindication = {
-	hasKeyFn: function ( object, cvalue ) {
+	hasKeyFn ( object, cvalue ) {
 		return !cvalue || (object && Object.keys( object ).length > 0)
 	},
-	requiredFn: function ( object, cvalue ) {
+	requiredFn ( object, cvalue ) {
 		return !cvalue || object || object === '' || _.isNumber(object) || _.isBoolean(object)
 	},
-	minlengthFn: function ( object, cvalue ) {
+	minlengthFn ( object, cvalue ) {
 		return object && object.length >= cvalue
 	},
-	maxlengthFn: function ( object, cvalue ) {
+	maxlengthFn ( object, cvalue ) {
 		return !object || object.length <= cvalue
 	},
-	lengthFn: function ( object, cvalue ) {
+	lengthFn ( object, cvalue ) {
 		if ( _.isString(cvalue) ) {
 			cvalue = JSON.parse( cvalue )
 		}
 		return this.minlengthFn( object, cvalue[ 0 ] ) && this.maxlengthFn( object, cvalue[ 1 ] )
 	},
-	elementFn: function ( object, cvalue ) {
+	elementFn ( object, cvalue ) {
 		return Array.isArray(cvalue) && cvalue.indexOf( object ) !== -1
 	},
-	keyElementFn: function ( object, cvalue ) {
+	keyElementFn ( object, cvalue ) {
 		return Array.isArray(cvalue) && Object.keys(object).filter( (value) => { return cvalue.indexOf( value ) !== -1 } ).length === Object.keys(object).length
 	},
-	greaterFn: function ( object, cvalue ) {
+	greaterFn ( object, cvalue ) {
 		return _.isNumber(object) && object > cvalue
 	},
-	minFn: function ( object, cvalue ) {
+	minFn ( object, cvalue ) {
 		return _.isNumber(object) && object >= cvalue
 	},
-	lessFn: function ( object, cvalue ) {
+	lessFn ( object, cvalue ) {
 		return _.isNumber(object) && object < cvalue
 	},
-	maxFn: function ( object, cvalue ) {
+	maxFn ( object, cvalue ) {
 		return _.isNumber(object) && object <= cvalue
 	},
-	rangeFn: function ( object, cvalue ) {
+	rangeFn ( object, cvalue ) {
 		return _.isNumber(object) && object >= cvalue[ 0 ] && object <= cvalue[ 1 ]
 	},
-	patternFn: function ( object, cvalue ) {
+	patternFn ( object, cvalue ) {
 		return new RegExp( cvalue ).test( object )
 	},
-	equaltoFn: function ( object, cvalue ) {
+	equaltoFn ( object, cvalue ) {
 		return object === cvalue
 	},
-	notblankFn: function ( object, cvalue ) {
+	notblankFn ( object, cvalue ) {
 		return !cvalue || this.minlengthFn( object, 1 )
 	},
-	beforeFn: function ( object, cvalue ) {
+	beforeFn ( object, cvalue ) {
 		return this.maxFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
-	afterFn: function ( object, cvalue ) {
+	afterFn ( object, cvalue ) {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
-	typeofFn: function ( object, cvalue ) {
+	typeofFn ( object, cvalue ) {
 		if (cvalue === 'function')
 			return _.isFunction( object )
 		else if (cvalue === 'string')
@@ -97,13 +97,13 @@ var Vindication = {
 
 		return regExp.test( _.isString( object ) ? object : object + '' )
 	},
-	typeInFn: function ( object, cvalue ) {
+	typeInFn ( object, cvalue ) {
 		for (let element of cvalue)
 			if ( Vindication.typeofFn( object, element ) )
 				return true
 		return false
 	},
-	_checkConstraints: function ( root, object, constraints, context, options ) {
+	_checkConstraints ( root, object, constraints, context, options ) {
 		var self = this
 		if ( _.isFunction( constraints ) ) {
 			if ( !constraints.call( context, object ) )
@@ -146,7 +146,7 @@ var Vindication = {
 		}
 		return null
 	},
-	checkConstraints: function ( root, object, constraints, context, options ) {
+	checkConstraints ( root, object, constraints, context, options ) {
 		try {
 			return this._checkConstraints( root, object, constraints, context, options )
 		}
@@ -154,7 +154,7 @@ var Vindication = {
 			console.error(err, object, constraints)
 		}
 	},
-	walk: function ( root, object, constraints, context, options ) {
+	walk ( root, object, constraints, context, options ) {
 		var self = this, res
 		if ( (typeof (object) === 'undefined' || object === null) && constraints ) {
 			return self.checkConstraints( root, object, constraints, context, options )
@@ -189,7 +189,7 @@ var Vindication = {
 			return res.length === 0 ? null : res
 		}
 		else if ( _.isFunction( object ) ) {
-			return self.checkConstraints( root, constraints && constraints.typeof === 'function' ? object : object.call( context ), constraints, context, options )
+			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isObject( object ) ) {
 			if ( _.isFunction( constraints ) ) {
@@ -228,17 +228,17 @@ function collectContraint (constraints, chain) {
 }
 
 module.exports = {
-	changeRegex: function (name, regex) {
+	changeRegex (name, regex) {
 		regexes[ name ] = regex
 	},
-	validateValue: function (value, path, constraints, context, options) {
+	validateValue (value, path, constraints, context, options) {
 		var constraint = collectContraint( constraints, path.split('.') )
 		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
 	},
-	validate: function (object, constraints, context, options) {
+	validate (object, constraints, context, options) {
 		return Vindication.walk( object, object, constraints || {}, context || object, options || {} )
 	},
-	validateAll: function (objects, constraints, context, options) {
+	validateAll (objects, constraints, context, options) {
 		if ( !Array.isArray( objects ) ) return this.validate( objects, constraints, context )
 		var res = []
 		objects.forEach(function (object) {
@@ -246,7 +246,7 @@ module.exports = {
 		})
 		return res
 	},
-	validateByProto: function (object, prototype, options = {}) {
+	validateByProto (object, prototype, options = {}) {
 		if (!prototype) return true
 		if (!object) throw new Error('Object seem to be empty')
 
@@ -260,7 +260,7 @@ module.exports = {
 			throw new Error('Additional properties detected: ' + addKeys.join(', ') )
 		return true
 	},
-	pick: function (object, predicate) {
+	pick (object, predicate) {
 		return _.pick( object, predicate )
 	}
 
