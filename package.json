@@ -1,6 +1,6 @@
 {
   "name": "vindication.js",
-  "version": "4.15.3",
+  "version": "4.15.4",
   "description": "JavaScript's function client-server synchronization helper library.",
   "homepage": "https://github.com/imrefazekas/vindication.js",
   "keywords": [

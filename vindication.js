@@ -21,7 +21,7 @@ let props = [
 	'element', 'keyElement', 'greater', 'min',
 	'less', 'max',
 	'range', 'pattern', 'equalto', 'before',
-	'after', 'typeof', 'notblank'
+	'after', 'typeof', 'typeIn', 'notblank'
 ]
 
 var Vindication = {
@@ -96,6 +96,12 @@ var Vindication = {
 		if (!exists) return false
 
 		return regExp.test( _.isString( object ) ? object : object + '' )
+	},
+	typeInFn: function ( object, cvalue ) {
+		for (let element of cvalue)
+			if ( Vindication.typeofFn( object, element ) )
+				return true
+		return false
 	},
 	_checkConstraints: function ( root, object, constraints, context, options ) {
 		var self = this

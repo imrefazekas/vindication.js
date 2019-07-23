@@ -95,7 +95,7 @@ Result:
 The rule syntax is simple as 1.
 For every attribute inside an object at a given level, you can define a rule object possessing a subset of the following definitions:
 
-required, hasKey, element, keyElement, typeof, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
+required, hasKey, element, keyElement, typeof, typeIn, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
 
 	required : true
 	notblank: true
