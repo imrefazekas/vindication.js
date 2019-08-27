@@ -16,7 +16,7 @@ var regexes = {
 }
 
 let props = [
-	'required', 'hasKey', 'minlength',
+	'required', 'forbidden', 'hasKey', 'minlength',
 	'maxlength', 'length',
 	'element', 'keyElement', 'greater', 'min',
 	'less', 'max',
@@ -30,6 +30,9 @@ var Vindication = {
 	},
 	requiredFn ( object, cvalue ) {
 		return !cvalue || object || object === '' || _.isNumber(object) || _.isBoolean(object)
+	},
+	forbiddenFn ( object, cvalue ) {
+		return !cvalue || !object
 	},
 	minlengthFn ( object, cvalue ) {
 		return object && object.length >= cvalue
@@ -127,7 +130,7 @@ var Vindication = {
 				return null
 			if ( constraints.convert )
 				object = constraints.convert.call( context, object, root )
-			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required )
+			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required && !constraints.forbidden )
 				return null
 			for (var key in constraints) {
 				if ( key !== 'message' && key !== 'condition' && key !== 'typeof' ) {

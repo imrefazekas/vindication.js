@@ -5,6 +5,7 @@ var s
 var object = {
 	firstName: 'Hajdú-Bihar',
 	lastName: 'Smith',
+	middleName: 'Huhh',
 	salutation: 'Dr.',
 	salary: 50000,
 	roles: [ ':::manager', 'supermanager', 'kingmanager', 'ultramanager' ],
@@ -24,6 +25,7 @@ var object = {
 var rules = {
 	firstName: { required: true, typeof: 'name' },
 	lastName: { minlength: '1', typeof: 'alphanum' },
+	middleName: { forbidden: true },
 	salary: { min: 80000 },
 	roles: { pattern: /^\w+$/ },
 	empty: { required: true },

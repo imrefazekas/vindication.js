@@ -15,7 +15,7 @@ The data object will be iterated through recursively along/parallel with the con
 
 Features:
 
-- simple value-based rules: required, notblank, minlength, maxlength, length, range, pattern, greater, less, min, max, equalto, before, after ...
+- simple value-based rules: required, forbidden, notblank, minlength, maxlength, length, range, pattern, greater, less, min, max, equalto, before, after ...
 - regular expression rules
 - validator functions for complex scenarios and/or structured objects
 - conditional validation: validation rule based on a condition evaluated in real-time
@@ -58,6 +58,7 @@ In JS code:
 		{
 			firstName: { required: true, typeof: 'alphanum' },
 			lastName: { minlength: '1', typeof: 'alphanum' },
+			middleName: { forbidden: true },
 			salary: { min: 80000 },
 			roles: { pattern:/^\w+$/ },
 			salutation: function( value ){
@@ -95,9 +96,10 @@ Result:
 The rule syntax is simple as 1.
 For every attribute inside an object at a given level, you can define a rule object possessing a subset of the following definitions:
 
-required, hasKey, element, keyElement, typeof, typeIn, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
+required, forbidden, hasKey, element, keyElement, typeof, typeIn, notblank, notblank, minlength, maxlength, length, greater, less, range, pattern, min, max, equalto, before, after
 
 	required : true
+	forbidden: true
 	notblank: true
 	minlength : 6
 	maxlength : 6
