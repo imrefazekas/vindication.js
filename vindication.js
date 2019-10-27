@@ -83,13 +83,14 @@ var Vindication = {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
 	typeofFn ( object, cvalue ) {
-		if (cvalue === 'function')
+		let tv = cvalue.toLowerCase()
+		if (tv === 'function')
 			return _.isFunction( object )
-		else if (cvalue === 'string')
+		else if (tv === 'string')
 			return _.isString( object )
-		else if (cvalue === 'array')
+		else if (tv === 'array')
 			return Array.isArray( object )
-		else if (cvalue === 'number')
+		else if (tv === 'number')
 			return typeof ( object ) !== 'undefined' && object !== null && _.isNumber( object )
 
 		var regExp = regexes[ cvalue ]
