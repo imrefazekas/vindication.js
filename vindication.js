@@ -15,6 +15,7 @@ var regexes = {
 	phone: /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
 }
 
+let modderProps = [ 'enforceLevel', 'message', 'condition', 'typeof' ]
 let props = [
 	'required', 'forbidden', 'hasKey', 'minlength',
 	'maxlength', 'length',
@@ -134,15 +135,14 @@ var Vindication = {
 			if ( (typeof object === 'undefined' || (object === '') || (object === null)) && !constraints.required && !constraints.forbidden )
 				return null
 			for (var key in constraints) {
-				if ( key !== 'message' && key !== 'condition' && key !== 'typeof' ) {
-					var constraint = constraints[key]
-					if ( !constraint.condition || constraint.condition.call( context, object ) ) {
-						if (!self[ key + 'Fn' ])
-							return 'This constraint is invalid: ' + key
-						var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object
-						if ( resp )
-							return resp
-					}
+				if ( modderProps.includes( key ) ) continue
+				var constraint = constraints[key]
+				if ( !constraint.condition || constraint.condition.call( context, object ) ) {
+					if (!self[ key + 'Fn' ])
+						return 'This constraint is invalid: ' + key
+					var resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object
+					if ( resp )
+						return resp
 				}
 			}
 			if (constraints.typeof)
@@ -178,7 +178,7 @@ var Vindication = {
 		else if ( _.isRegExp( object ) ) {
 			return null
 		}
-		else if ( Array.isArray( object ) ) {
+		else if ( !constraints.enforceLevel && Array.isArray( object ) ) {
 			res = []
 			if ( constraints._validator ) {
 				var obj = self.checkConstraints( root, object, constraints._validator, context, options )
@@ -192,7 +192,7 @@ var Vindication = {
 			})
 			return res.length === 0 ? null : res
 		}
-		else if ( _.isFunction( object ) ) {
+		else if ( !constraints.enforceLevel && _.isFunction( object ) ) {
 			return self.checkConstraints( root, object, constraints, context, options )
 		}
 		else if ( _.isObject( object ) ) {

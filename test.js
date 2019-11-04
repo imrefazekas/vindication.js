@@ -1,6 +1,14 @@
+var _ = require('isa.js')
+
 var f = require('./vindication')
 
 var s
+
+let array = [ 'what' ]
+console.log(
+	_.isObject( array ),
+	_.isArray( array )
+)
 
 var object = {
 	firstName: 'Hajdú-Bihar',
@@ -19,7 +27,8 @@ var object = {
 	digit: '1',
 	registered: false,
 	somedata: { hello: 'huh' },
-	empty: ''
+	empty: '',
+	pack: [ { name: 'What?' } ]
 }
 
 var rules = {
@@ -35,6 +44,7 @@ var rules = {
 	},
 	digit: { length: 1 },
 	hablaty: { required: true },
+	pack: { enforceLevel: true, required: true, typeof: 'array' },
 	address: {
 		country: { minlength: 6, element: ['France'] },
 		city: { equalto: {
