@@ -77,6 +77,8 @@ s = f.validate( object, rules )
 
 console.log( '>>', s )
 
+console.log( f.validateConstraints( rules ) )
+
 /*
 s = f.validateAll( [object], rules )
 

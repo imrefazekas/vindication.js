@@ -160,6 +160,27 @@ var Vindication = {
 			console.error(err, object, constraints)
 		}
 	},
+	walkConstraints ( constraints, options ) {
+		if ( !constraints || !_.isObject( constraints ) )
+			throw new Error( `This value is not valid: ${constraints}` )
+
+		if ( _.isFunction( constraints ) )
+			return true
+		else if ( constraints._validator )
+			return true
+
+		var self = this
+		let keys = Object.keys( constraints )
+		if ( keys.find( (key) => { return props.includes( key ) } ) ) {
+			for (let key of keys)
+				if ( !props.includes( key ) && !modderProps.includes( key ) )
+					throw new Error( `This key is not valid: ${key}` )
+		}
+		else for (let key of keys)
+			self.walkConstraints( constraints[ key ], options )
+
+		return true
+	},
 	walk ( root, object, constraints, context, options ) {
 		var self = this, res
 		if ( (typeof (object) === 'undefined' || object === null) && constraints ) {
@@ -240,6 +261,9 @@ module.exports = {
 	validateValue (value, path, constraints, context, options) {
 		var constraint = collectContraint( constraints, path.split('.') )
 		return Vindication.walk( value, value, constraint || {}, context || value, options || {} )
+	},
+	validateConstraints (constraints, options) {
+		return Vindication.walkConstraints( constraints || {}, options || {} )
 	},
 	validate (object, constraints, context, options) {
 		return Vindication.walk( object, object, constraints || {}, context || object, options || {} )
