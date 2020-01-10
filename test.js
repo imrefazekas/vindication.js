@@ -1,10 +1,11 @@
 var f = Number
 console.log( Number === f )
 
-
 var _ = require('isa.js')
 
 var f = require('./vindication')
+
+console.log( '---???>>', f.defaultValue( {} ) )
 
 var s
 

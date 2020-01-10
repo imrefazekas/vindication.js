@@ -269,7 +269,7 @@ module.exports = {
 			return 0
 		else if (tv === 'boolean' || tv === Boolean)
 			return false
-		else if (tv === 'object' || _.isObject(tv))
+		else if (tv === 'object' || (!_.isString( tv ) && _.isObject(tv)))
 			return {}
 
 		return ''
