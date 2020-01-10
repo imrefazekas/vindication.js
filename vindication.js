@@ -84,16 +84,16 @@ var Vindication = {
 		return this.minFn( object.getTime ? object.getTime() : object, cvalue.getTime ? cvalue.getTime() : cvalue )
 	},
 	typeofFn ( object, cvalue ) {
-		let tv = cvalue.toLowerCase()
+		let tv = _.isString( cvalue ) ? cvalue.toLowerCase() : cvalue
 		if (tv === 'function')
 			return _.isFunction( object )
-		else if (tv === 'string')
+		else if (tv === 'string' || tv === String)
 			return _.isString( object )
-		else if (tv === 'array')
+		else if (tv === 'array' || tv === Array)
 			return Array.isArray( object )
-		else if (tv === 'number')
+		else if (tv === 'number' || tv === Number)
 			return typeof ( object ) !== 'undefined' && object !== null && _.isNumber( object )
-		else if (tv === 'boolean')
+		else if (tv === 'boolean' || tv === Boolean)
 			return typeof ( object ) !== 'undefined' && object !== null && _.isBoolean( object )
 
 		var regExp = regexes[ cvalue ]
@@ -255,6 +255,19 @@ function collectContraint (constraints, chain) {
 }
 
 module.exports = {
+	defaultValue ( validation ) {
+		if (!validation || !validation.typeof) return ''
+
+		let tv = _.isString( validation ) ? validation.toLowerCase() : validation
+		if (tv === 'string' || tv === String)
+			return ''
+		else if (tv === 'array' || tv === Array)
+			return []
+		else if (tv === 'number' || tv === Number)
+			return 0
+		else if (tv === 'boolean' || tv === Boolean)
+			return false
+	},
 	changeRegex (name, regex) {
 		regexes[ name ] = regex
 	},
