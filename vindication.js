@@ -260,7 +260,8 @@ module.exports = {
 	defaultValue ( validation ) {
 		if (!validation || !validation.typeof) return ''
 
-		let tv = _.isString( validation ) ? validation.toLowerCase() : validation
+		let typeName = validation.typeof
+		let tv = _.isString( typeName ) ? typeName.toLowerCase() : typeName
 		if (tv === 'string' || tv === String)
 			return ''
 		else if (tv === 'array' || tv === Array)
