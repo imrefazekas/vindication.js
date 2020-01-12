@@ -85,7 +85,7 @@ var Vindication = {
 	},
 	typeofFn ( object, cvalue ) {
 		let tv = _.isString( cvalue ) ? cvalue.toLowerCase() : cvalue
-		if (tv === 'function')
+		if (tv === 'function' || tv === Function)
 			return _.isFunction( object )
 		else if (tv === 'string' || tv === String)
 			return _.isString( object )
@@ -262,7 +262,9 @@ module.exports = {
 
 		let typeName = validation.typeof
 		let tv = _.isString( typeName ) ? typeName.toLowerCase() : typeName
-		if (tv === 'string' || tv === String)
+		if (tv === 'function' || tv === Function)
+			return () => {}
+		else if (tv === 'string' || tv === String)
 			return ''
 		else if (tv === 'array' || tv === Array)
 			return []
