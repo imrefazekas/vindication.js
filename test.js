@@ -15,6 +15,11 @@ console.log(
 	_.isArray( array )
 )
 
+
+console.log( '????>>>>', f.validate( [], { _outer: { required: true, minlength: 1 } } ) )
+
+console.log( '>>>>', f.validate( 'AU', { required: true, typeof: 'name', minlength: 2 } ) )
+
 var object = {
 	firstName: 'Hajdú-Bihar',
 	lastName: 'Smith',
@@ -49,7 +54,7 @@ var rules = {
 	},
 	digit: { length: 1 },
 	hablaty: { required: true },
-	pack: { enforceLevel: true, required: true, typeof: 'array' },
+	pack: { _outer: { required: true, typeof: 'array' } },
 	address: {
 		country: { minlength: 6, element: ['France'] },
 		city: { equalto: {
@@ -77,6 +82,8 @@ var rules = {
 		keyElement: [ 'hello' ]
 	}
 }
+
+console.log( '\n\n-----------\n\n' )
 
 s = f.validate( object, rules )
 
