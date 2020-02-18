@@ -118,7 +118,7 @@ let Vindication = {
 	_checkConstraints ( root, object, constraints, context, options ) {
 		let self = this
 		if ( _.isFunction( constraints ) ) {
-			if ( !constraints.call( context, object ) )
+			if ( !constraints.call( context, object, root ) )
 				return 'This value seems to be invalid:' + ' ' + object
 		}
 		else if ( _.isArray( constraints ) ) {
