@@ -25,6 +25,23 @@ const props = [
 	'after', 'typeof', 'typeIn', 'notblank'
 ]
 
+const ERROR_MSG = 'This value seems to be invalid: {value} for {key}'
+function defined (value) {
+	return value !== undefined && value !== null
+}
+function templating (string, ...parameters) {
+	let options = parameters.length === 1 && _.isObject( parameters[0] ) ? parameters[0] : parameters
+
+	return string.replace(/\{([0-9a-zA-Z_]+)\}/g, (match, i, index) => {
+		if (string[index - 1] === '{' &&
+			string[index + match.length] === '}') {
+			return i
+		} else {
+			return options.hasOwnProperty(i) && defined( options[i] ) ? JSON.stringify(options[i]) : 'undefined'
+		}
+	})
+}
+
 let Vindication = {
 	hasKeyFn ( object, cvalue ) {
 		return !cvalue || (object && Object.keys( object ).length > 0)
@@ -119,7 +136,7 @@ let Vindication = {
 		let self = this
 		if ( _.isFunction( constraints ) ) {
 			if ( !constraints.call( context, object, root ) )
-				return 'This value seems to be invalid:' + ' ' + object
+				return templating( constraints.message || ERROR_MSG, { value: object } )
 		}
 		else if ( _.isArray( constraints ) ) {
 			let vals = []
@@ -147,13 +164,13 @@ let Vindication = {
 				if ( !constraint.condition || constraint.condition.call( context, object ) ) {
 					if (!self[ key + 'Fn' ])
 						return 'This constraint is invalid: ' + key
-					let resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : (constraints.message || 'This value seems to be invalid:') + ' ' + object
+					let resp = self[ key + 'Fn' ](object, constraint.params || constraint) ? null : templating( constraints.message || ERROR_MSG, { value: object, key } )
 					if ( resp )
 						return resp
 				}
 			}
 			if (constraints.typeof)
-				return self.typeofFn(object, constraints.typeof) ? null : 'This value seems to be invalid: ' + object
+				return self.typeofFn(object, constraints.typeof) ? null : templating( constraints.message || ERROR_MSG, { value: object } )
 		}
 		return null
 	},
@@ -167,7 +184,7 @@ let Vindication = {
 	},
 	walkConstraints ( constraints, options ) {
 		if ( !constraints || !_.isObject( constraints ) )
-			throw new Error( `This value is not valid: ${constraints}` )
+			throw new Error( `This value seems to be invalid: ${constraints}` )
 
 		if ( _.isFunction( constraints ) )
 			return true
@@ -236,8 +253,10 @@ let Vindication = {
 			else {
 				res = {}
 				let keys = Object.keys( options.sourceBased ? object : constraints )
+				/*
 				if ( keys.find( (key) => { return props.includes( key ) } ) )
 					return self.checkConstraints( root, object, constraints, context, options )
+				*/
 				for (let key of keys) {
 					if ( key && constraints[key] ) {
 						let n = object[key]
