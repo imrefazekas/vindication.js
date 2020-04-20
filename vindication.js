@@ -201,6 +201,25 @@ let Vindication = {
 
 		return true
 	},
+	isConstraint ( constraint = {} ) {
+		if (!constraint) return false
+
+		let keys = Object.keys( constraint )
+		for (let key of keys)
+			if ( !props.includes( key ) )
+				return false
+		return true
+	},
+	hasConstraint ( constraint = {} ) {
+		if (!constraint) return false
+		if ( this.isConstraint( constraint ) ) return true
+
+		let keys = Object.keys( constraint )
+		for (let key of keys)
+			if ( constraint[key] && _.isObject(constraint[key]) && this.embedConstraint( constraint[key] ) ) return true
+
+		return false
+	},
 	walk ( root, object, constraints, context, options ) {
 		let self = this, res
 		if ( (typeof (object) === 'undefined' || object === null) && constraints ) {
@@ -253,10 +272,10 @@ let Vindication = {
 			else {
 				res = {}
 				let keys = Object.keys( options.sourceBased ? object : constraints )
-				/*
-				if ( keys.find( (key) => { return props.includes( key ) } ) )
+
+				if ( self.isConstraint(constraints) && !self.hasConstraint(constraints) )
 					return self.checkConstraints( root, object, constraints, context, options )
-				*/
+
 				for (let key of keys) {
 					if ( key && constraints[key] ) {
 						let n = object[key]
