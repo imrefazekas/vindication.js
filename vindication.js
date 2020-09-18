@@ -136,7 +136,7 @@ let Vindication = {
 		let self = this
 		if ( _.isFunction( constraints ) ) {
 			if ( !constraints.call( context, object, root ) )
-				return templating( constraints.message || ERROR_MSG, { value: object } )
+				return templating( constraints.message || ERROR_MSG, { value: object, key: 'Fn' } )
 		}
 		else if ( _.isArray( constraints ) ) {
 			let vals = []
@@ -170,7 +170,7 @@ let Vindication = {
 				}
 			}
 			if (constraints.typeof)
-				return self.typeofFn(object, constraints.typeof) ? null : templating( constraints.message || ERROR_MSG, { value: object } )
+				return self.typeofFn(object, constraints.typeof) ? null : templating( constraints.message || ERROR_MSG, { value: object, key: 'typeof' } )
 		}
 		return null
 	},
