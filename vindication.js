@@ -170,7 +170,7 @@ let Vindication = {
 				}
 			}
 			if (constraints.typeof)
-				return self.typeofFn(object, constraints.typeof) ? null : templating( constraints.message || ERROR_MSG, { value: object, key: constraints.typeof || 'typeof' } )
+				return self.typeofFn(object, constraints.typeof) ? null : templating( constraints.message || ERROR_MSG, { value: object, key: constraints.typeof } )
 		}
 		return null
 	},
