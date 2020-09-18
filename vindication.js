@@ -37,7 +37,7 @@ function templating (string, ...parameters) {
 			string[index + match.length] === '}') {
 			return i
 		} else {
-			return options.hasOwnProperty(i) && defined( options[i] ) ? JSON.stringify(options[i]) : 'undefined'
+			return options.hasOwnProperty(i) && defined( options[i] ) ? (_.isFunction(options[i]) ? options[i].name : JSON.stringify(options[i])) : 'undefined'
 		}
 	})
 }
