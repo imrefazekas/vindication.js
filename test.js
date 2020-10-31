@@ -15,7 +15,13 @@ console.log(
 	_.isArray( array )
 )
 
+console.log( '!!! UID >>>>', f.validate( 'AU', { required: true, typeof: 'uid' } ) )
+console.log( '!!! UID >>>>', f.validate( 'A-F', { required: true, typeof: 'uid' } ) )
+console.log( '!!! UID >>>>', f.validate( 'A-F-F-G', { required: true, typeof: 'uid' } ) )
+console.log( '!!! UID >>>>', f.validate( 'A-F-', { required: true, typeof: 'uid' } ) )
+console.log( '!!! UID >>>>', f.validate( '-F-', { required: true, typeof: 'uid' } ) )
 
+/*
 console.log( '????>>>>', f.validate( [], { _outer: { required: true, minlength: 1 } } ) )
 
 console.log( '>>>>', f.validate( 'AU', { required: true, typeof: 'name', minlength: 2 } ) )
@@ -90,6 +96,7 @@ s = f.validate( object, rules )
 console.log( '>>', s )
 
 console.log( f.validateConstraints( rules ) )
+*/
 
 /*
 s = f.validateAll( [object], rules )
